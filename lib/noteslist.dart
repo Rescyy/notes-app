@@ -1,6 +1,4 @@
-import 'dart:math' as math;
-import 'dart:developer';
-import 'package:assignment_2/notes_pallette.dart';
+import 'package:assignment_2/notestile.dart';
 import 'package:flutter/material.dart';
 
 class NoteData {
@@ -16,6 +14,16 @@ class NoteData {
 }
 
 final List<NoteData> bibleVerses = [
+  NoteData(
+    title: "title",
+    content: "",
+    color: Colors.black,
+  ),
+  NoteData(
+    title: "title",
+    content: "content",
+    color: Colors.black,
+  ),
   NoteData(
     title: "Jeremiah 29:11",
     content:
@@ -75,66 +83,13 @@ class _NoteslistState extends State<Noteslist> {
       padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
       itemCount: bibleVerses.length,
       itemBuilder: (context, index) {
-        TextSpan noteText = TextSpan(
-          children: [
-            TextSpan(
-              text: '${bibleVerses[index].title}\n',
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-            ),
-            const TextSpan(
-              text: '\n',
-              style: TextStyle(fontSize: 4),
-            ),
-            TextSpan(
-              text: bibleVerses[index].content,
-              style: const TextStyle(
-                fontSize: 15,
-                color: Colors.black,
-              ),
-            ),
-          ],
-        );
-        final textPainter = TextPainter(
-          text: noteText,
-          textDirection: TextDirection.ltr,
-        )..layout(maxWidth: MediaQuery.sizeOf(context).width - 44);
-        final height = textPainter.height + 26;
-        log('$height');
-        return SizedBox(
-          height: math.max(height, 90),
-          child: Padding(
-            padding: const EdgeInsets.all(1),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: NotesPallette.getNoteColor(""),
-                boxShadow: const [
-                  BoxShadow(
-                    blurRadius: 1,
-                    // blurStyle: BlurStyle.normal,
-                    color: Color.fromARGB(147, 144, 156, 162),
-                    offset: Offset(0, 3),
-                    // spreadRadius: 2,
-                  ),
-                ],
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(12),
-                child: RichText(
-                  text: noteText,
-                  textDirection: TextDirection.ltr,
-                ),
-              ),
-            ),
-          ),
+        return Notestile(
+          title: bibleVerses[index].title,
+          content: bibleVerses[index].content,
         );
       },
       separatorBuilder: (context, index) {
-        return const SizedBox(height: 5);
+        return const SizedBox(height: 10);
       },
     );
   }

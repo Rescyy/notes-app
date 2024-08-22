@@ -8,9 +8,8 @@ class NotesApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // scrollBehavior: const MaterialScrollBehavior().copyWith(scrollbars: true),
       home: Scaffold(
-        backgroundColor: Colors.blueGrey[200],
+        backgroundColor: NotesPallette.background,
         appBar: AppBar(
           scrolledUnderElevation: 0.0,
           backgroundColor: NotesPallette.background,
@@ -18,7 +17,7 @@ class NotesApp extends StatelessWidget {
         ),
         floatingActionButton: FloatingActionButton(
           backgroundColor: NotesPallette.floatingButton,
-          splashColor: Colors.blueGrey[200]?.withAlpha(100),
+          splashColor: NotesPallette.splashColor,
           onPressed: () {},
           child: const Icon(Icons.add),
         ),
@@ -26,56 +25,52 @@ class NotesApp extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(12, 12, 4, 80),
           child: SafeArea(
             top: false,
-            child: Stack(
-              children: [
-                SizedBox(
-                  child: Scrollbar(
-                    thickness: 8,
-                    radius: const Radius.circular(5),
-                    thumbVisibility: true,
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: MediaQuery.sizeOf(context).width - 35,
-                          child: const Noteslist(),
+            child: SizedBox(
+              child: Scrollbar(
+                thickness: 8,
+                radius: const Radius.circular(5),
+                thumbVisibility: true,
+                child: Stack(
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.fromLTRB(0, 0, 18, 0),
+                      child: Noteslist(),
+                    ),
+                    Align(
+                      alignment: Alignment.topCenter,
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              NotesPallette.background,
+                              NotesPallette.backgroundTransparent
+                            ],
+                          ),
                         ),
-                      ],
-                    ),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          NotesPallette.background,
-                          NotesPallette.backgroundTransparent
-                        ],
+                        height: 10,
                       ),
                     ),
-                    height: 10,
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.bottomCenter,
-                        end: Alignment.topCenter,
-                        colors: [
-                          NotesPallette.background,
-                          NotesPallette.backgroundTransparent
-                        ],
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.bottomCenter,
+                            end: Alignment.topCenter,
+                            colors: [
+                              NotesPallette.background,
+                              NotesPallette.backgroundTransparent
+                            ],
+                          ),
+                        ),
+                        height: 10,
                       ),
                     ),
-                    height: 10,
-                  ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
         ),
