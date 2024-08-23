@@ -1,4 +1,4 @@
-import 'package:assignment_2/notesapp.dart';
+import 'package:assignment_2/notes_body.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -10,6 +10,8 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const NotesApp();
+    return const MaterialApp(
+      home: NotesBody(),
+    );
   }
 }
