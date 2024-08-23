@@ -28,6 +28,7 @@ class _NotesEditDialogState extends State<NotesEditDialog> {
 
   @override
   void dispose() {
+    _titleFocusNode.dispose();
     _titleController.dispose();
     _contentController.dispose();
     super.dispose();

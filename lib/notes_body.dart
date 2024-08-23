@@ -1,3 +1,4 @@
+import 'package:assignment_2/notes_body_model.dart';
 import 'package:assignment_2/notes_database.dart';
 import 'package:assignment_2/notes_edit_dialog.dart';
 import 'package:assignment_2/notes_pallette.dart';
@@ -12,79 +13,27 @@ class NotesBody extends StatefulWidget {
 }
 
 class _NotesBodyState extends State<NotesBody> {
-  final NotesDatabaseAbstract database = BibleNotesDatabase();
+  // final NotesDatabaseAbstract database = BibleNotesDatabase();
+  final NotesDatabaseAbstract database = NotesDatabase();
 
   @override
   Widget build(BuildContext context) {
     Widget front;
     if (database.notes.isEmpty) {
-      front = const Center(
-        child: Text(
-          'Wow such empty :(',
-          style: TextStyle(
-            fontSize: 20,
-            color: NotesPallette.textDark,
-          ),
-        ),
-      );
+      front = const NotesEmptyBodyModel();
     } else {
-      front = Scrollbar(
-        thickness: 8,
-        radius: const Radius.circular(5),
-        thumbVisibility: true,
-        child: Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 0, 18, 0),
-              child: NotesList(
-                database: database,
-                onNoteEditted: (note, index) {
-                  setState(() {
-                    database.editNote(note, index);
-                  });
-                },
-                onNoteDeleted: (index) {
-                  setState(() {
-                    database.removeNote(index);
-                  });
-                },
-              ),
-            ),
-            Align(
-              alignment: Alignment.topCenter,
-              child: Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      NotesPallette.background,
-                      NotesPallette.backgroundTransparent
-                    ],
-                  ),
-                ),
-                height: 10,
-              ),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.bottomCenter,
-                    end: Alignment.topCenter,
-                    colors: [
-                      NotesPallette.background,
-                      NotesPallette.backgroundTransparent
-                    ],
-                  ),
-                ),
-                height: 10,
-              ),
-            ),
-          ],
-        ),
-      );
+      front = NotesScrollbar(
+          database: database,
+          onNoteEditted: (note, index) {
+            setState(() {
+              database.editNote(note, index);
+            });
+          },
+          onNoteDeleted: (index) {
+            setState(() {
+              database.removeNote(index);
+            });
+          });
     }
 
     return Scaffold(
