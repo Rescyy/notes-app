@@ -3,8 +3,8 @@ import 'package:assignment_2/notes_database.dart';
 import 'package:assignment_2/notes_pallette.dart';
 import 'package:flutter/material.dart';
 
-class NotesEmptyBodyModel extends StatelessWidget {
-  const NotesEmptyBodyModel({super.key});
+class NotesEmpty extends StatelessWidget {
+  const NotesEmpty({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -38,21 +38,23 @@ class NotesScrollbar extends StatefulWidget {
 class _NotesScrollbarState extends State<NotesScrollbar> {
   @override
   Widget build(BuildContext context) {
-    return _NotesScrollbarModel(
-      itemCount: widget.notes.length,
-      itemBuilder: (context, index) {
-        return NotesCard(
-          title: widget.notes[index].title,
-          content: widget.notes[index].content,
-          onNoteEditted: (note) {
-            widget.onNoteEditted(note, index);
-          },
-          onNoteDeleted: () {
-            widget.onNoteDeleted(index);
-          },
-        );
-      },
-    );
+    return widget.notes.isEmpty
+        ? const NotesEmpty()
+        : _NotesScrollbarModel(
+            itemCount: widget.notes.length,
+            itemBuilder: (context, index) {
+              return NotesCard(
+                title: widget.notes[index].title,
+                content: widget.notes[index].content,
+                onNoteEditted: (note) {
+                  widget.onNoteEditted(note, index);
+                },
+                onNoteDeleted: () {
+                  widget.onNoteDeleted(index);
+                },
+              );
+            },
+          );
   }
 }
 

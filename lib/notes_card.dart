@@ -109,7 +109,7 @@ class _NotesCardModel extends StatelessWidget {
                   icon: const Icon(Icons.delete, size: 20),
                   color: NotesPallette.cardIcon,
                   onPressed: onNoteDeleted,
-                )
+                ),
               ],
             ),
           ],

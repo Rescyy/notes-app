@@ -17,23 +17,49 @@ class _NotesBodyState extends State<NotesBody> {
 
   @override
   Widget build(BuildContext context) {
-    Widget front;
-    if (database.notes.isEmpty) {
-      front = const NotesEmptyBodyModel();
-    } else {
-      front = NotesScrollbar(
-          notes: database.notes,
-          onNoteEditted: (note, index) {
-            setState(() {
-              database.editNote(note, index);
-            });
-          },
-          onNoteDeleted: (index) {
-            setState(() {
-              database.removeNote(index);
-            });
+    return _NotesBodyModel(
+      onFloatingButtonPressed: () {
+        showDialog<void>(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) => NotesEditDialog(
+            topText: "New Note",
+            onNoteAccepted: (NoteData note) {
+              setState(() {
+                database.addNote(note);
+              });
+            },
+          ),
+        );
+      },
+      child: NotesScrollbar(
+        notes: database.notes,
+        onNoteEditted: (note, index) {
+          setState(() {
+            database.editNote(note, index);
           });
-    }
+        },
+        onNoteDeleted: (index) {
+          setState(() {
+            database.removeNote(index);
+          });
+        },
+      ),
+    );
+  }
+}
+
+class _NotesBodyModel extends StatelessWidget {
+  const _NotesBodyModel({
+    required this.onFloatingButtonPressed,
+    required this.child,
+  });
+
+  final void Function() onFloatingButtonPressed;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: NotesPallette.background,
       appBar: AppBar(
@@ -45,28 +71,13 @@ class _NotesBodyState extends State<NotesBody> {
         backgroundColor: NotesPallette.floatingButton,
         splashColor: NotesPallette.splashColor,
         foregroundColor: NotesPallette.buttonTextDark,
-        onPressed: () {
-          showDialog<void>(
-            context: context,
-            barrierDismissible: false,
-            builder: (_) => NotesEditDialog(
-              topText: "New Note",
-              onNoteAccepted: (NoteData note) {
-                setState(
-                  () {
-                    database.addNote(note);
-                  },
-                );
-              },
-            ),
-          );
-        },
+        onPressed: onFloatingButtonPressed,
         child: const Icon(Icons.add),
       ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(12, 12, 4, 0),
-          child: front,
+          child: child,
         ),
       ),
     );
