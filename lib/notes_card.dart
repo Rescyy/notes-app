@@ -1,5 +1,5 @@
 import 'package:assignment_2/notes_database.dart';
-import 'package:assignment_2/notes_edit_dialog.dart';
+import 'package:assignment_2/notes_dialog.dart';
 import 'package:assignment_2/notes_pallette.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
@@ -27,9 +27,8 @@ class NotesTitle extends TextSpan {
         );
 }
 
-class NotesCard extends StatelessWidget {
-  const NotesCard({
-    super.key,
+class _NotesCardModel extends StatelessWidget {
+  const _NotesCardModel({
     required this.title,
     required this.content,
     required this.onNoteEditted,
@@ -38,7 +37,7 @@ class NotesCard extends StatelessWidget {
 
   final String title;
   final String content;
-  final void Function(NoteData) onNoteEditted;
+  final void Function() onNoteEditted;
   final void Function() onNoteDeleted;
 
   @override
@@ -104,63 +103,62 @@ class NotesCard extends StatelessWidget {
                 IconButton(
                   icon: const Icon(Icons.edit, size: 20),
                   color: NotesPallette.cardIcon,
-                  onPressed: () {
-                    showDialog<void>(
-                      context: context,
-                      builder: (context) {
-                        return NotesEditDialog(
-                          title: title,
-                          content: content,
-                          titleText: 'Edit Note',
-                          onNoteAccepted: (note) {
-                            onNoteEditted(note);
-                          },
-                        );
-                      },
-                    );
-                  },
+                  onPressed: onNoteEditted,
                 ),
                 IconButton(
                   icon: const Icon(Icons.delete, size: 20),
                   color: NotesPallette.cardIcon,
-                  onPressed: () {
-                    showDialog<void>(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: const Text('Delete Note'),
-                            content: const Text(
-                                'Are you sure you want to delete this note?'),
-                            actions: [
-                              TextButton(
-                                style: const ButtonStyle(
-                                  foregroundColor:
-                                      WidgetStatePropertyAll(Colors.red),
-                                ),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('Cancel'),
-                              ),
-                              TextButton(
-                                style: const ButtonStyle(
-                                  foregroundColor:
-                                      WidgetStatePropertyAll(Colors.red),
-                                ),
-                                onPressed: () {
-                                  onNoteDeleted();
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('Delete'),
-                              ),
-                            ],
-                          );
-                        });
-                  },
+                  onPressed: onNoteDeleted,
                 )
               ],
             ),
           ],
+        );
+      },
+    );
+  }
+}
+
+class NotesCard extends StatelessWidget {
+  const NotesCard({
+    super.key,
+    required this.title,
+    required this.content,
+    required this.onNoteEditted,
+    required this.onNoteDeleted,
+  });
+
+  final String title;
+  final String content;
+  final void Function(NoteData) onNoteEditted;
+  final void Function() onNoteDeleted;
+
+  @override
+  Widget build(BuildContext context) {
+    return _NotesCardModel(
+      title: title,
+      content: content,
+      onNoteEditted: () {
+        showDialog<void>(
+          context: context,
+          builder: (context) {
+            return NotesEditDialog(
+              title: title,
+              content: content,
+              topText: 'Edit Note',
+              onNoteAccepted: onNoteEditted,
+            );
+          },
+        );
+      },
+      onNoteDeleted: () {
+        showDialog<void>(
+          context: context,
+          builder: (context) {
+            return NotesDeleteDialog(
+              onDelete: onNoteDeleted,
+            );
+          },
         );
       },
     );

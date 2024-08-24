@@ -1,8 +1,7 @@
-import 'package:assignment_2/notes_body_model.dart';
+import 'package:assignment_2/notes_scrollbar.dart';
 import 'package:assignment_2/notes_database.dart';
-import 'package:assignment_2/notes_edit_dialog.dart';
+import 'package:assignment_2/notes_dialog.dart';
 import 'package:assignment_2/notes_pallette.dart';
-import 'package:assignment_2/notes_list.dart';
 import 'package:flutter/material.dart';
 
 class NotesBody extends StatefulWidget {
@@ -13,8 +12,8 @@ class NotesBody extends StatefulWidget {
 }
 
 class _NotesBodyState extends State<NotesBody> {
-  // final NotesDatabaseAbstract database = BibleNotesDatabase();
-  final NotesDatabaseAbstract database = NotesDatabase();
+  final NotesDatabaseAbstract database = BibleNotesDatabase();
+  // final NotesDatabaseAbstract database = NotesDatabase();
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +22,7 @@ class _NotesBodyState extends State<NotesBody> {
       front = const NotesEmptyBodyModel();
     } else {
       front = NotesScrollbar(
-          database: database,
+          notes: database.notes,
           onNoteEditted: (note, index) {
             setState(() {
               database.editNote(note, index);
@@ -35,7 +34,6 @@ class _NotesBodyState extends State<NotesBody> {
             });
           });
     }
-
     return Scaffold(
       backgroundColor: NotesPallette.background,
       appBar: AppBar(
@@ -50,8 +48,9 @@ class _NotesBodyState extends State<NotesBody> {
         onPressed: () {
           showDialog<void>(
             context: context,
-            barrierDismissible: false, // user must tap button!
+            barrierDismissible: false,
             builder: (_) => NotesEditDialog(
+              topText: "New Note",
               onNoteAccepted: (NoteData note) {
                 setState(
                   () {
@@ -59,19 +58,15 @@ class _NotesBodyState extends State<NotesBody> {
                   },
                 );
               },
-              titleText: "New Note",
             ),
           );
         },
         child: const Icon(Icons.add),
       ),
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(12, 12, 4, 80),
-        child: SafeArea(
-          top: false,
-          child: SizedBox(
-            child: front,
-          ),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(12, 12, 4, 0),
+          child: front,
         ),
       ),
     );

@@ -2,45 +2,30 @@ import 'package:assignment_2/notes_database.dart';
 import 'package:assignment_2/notes_pallette.dart';
 import 'package:flutter/material.dart';
 
-class NotesEditDialog extends StatefulWidget {
-  const NotesEditDialog({
-    super.key,
-    required this.onNoteAccepted,
-    this.title,
-    this.content,
-    required this.titleText,
-  });
+class _NotesEditDialogModel extends StatelessWidget {
+  const _NotesEditDialogModel(
+      {required this.formKey,
+      required this.topText,
+      required this.titleFocusNode,
+      required this.titleController,
+      required this.contentController,
+      required this.onCancel,
+      required this.onFinish});
 
-  final void Function(NoteData) onNoteAccepted;
-  final String? title;
-  final String? content;
-  final String titleText;
-
-  @override
-  State<NotesEditDialog> createState() => _NotesEditDialogState();
-}
-
-class _NotesEditDialogState extends State<NotesEditDialog> {
-  final _formKey = GlobalKey<FormState>();
-  late final _titleController = TextEditingController(text: widget.title);
-  late final _contentController = TextEditingController(text: widget.content);
-  final _titleFocusNode = FocusNode();
-
-  @override
-  void dispose() {
-    _titleFocusNode.dispose();
-    _titleController.dispose();
-    _contentController.dispose();
-    super.dispose();
-  }
+  final GlobalKey<FormState> formKey;
+  final String topText;
+  final FocusNode titleFocusNode;
+  final TextEditingController titleController;
+  final TextEditingController contentController;
+  final void Function() onCancel;
+  final void Function() onFinish;
 
   @override
   Widget build(BuildContext context) {
-    _titleFocusNode.requestFocus();
     return Dialog(
       backgroundColor: NotesPallette.dialogBackground,
       child: Form(
-        key: _formKey,
+        key: formKey,
         child: SizedBox(
           height: 450,
           child: Padding(
@@ -50,7 +35,7 @@ class _NotesEditDialogState extends State<NotesEditDialog> {
               children: [
                 Center(
                   child: Text(
-                    widget.titleText,
+                    topText,
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -59,8 +44,8 @@ class _NotesEditDialogState extends State<NotesEditDialog> {
                 ),
                 const Spacer(),
                 TextFormField(
-                  focusNode: _titleFocusNode,
-                  controller: _titleController,
+                  focusNode: titleFocusNode,
+                  controller: titleController,
                   maxLength: 30,
                   cursorWidth: 1.5,
                   style: const TextStyle(fontSize: 15),
@@ -85,7 +70,7 @@ class _NotesEditDialogState extends State<NotesEditDialog> {
                 ),
                 const Spacer(),
                 TextFormField(
-                  controller: _contentController,
+                  controller: contentController,
                   maxLength: 200,
                   maxLines: 7,
                   cursorWidth: 1.5,
@@ -124,9 +109,7 @@ class _NotesEditDialogState extends State<NotesEditDialog> {
                           NotesPallette.splashColor,
                         ),
                       ),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
+                      onPressed: onCancel,
                       child: const Text('Cancel'),
                     ),
                     const Spacer(),
@@ -142,17 +125,7 @@ class _NotesEditDialogState extends State<NotesEditDialog> {
                           NotesPallette.splashColor,
                         ),
                       ),
-                      onPressed: () {
-                        if (_formKey.currentState?.validate() ?? false) {
-                          Navigator.of(context).pop();
-                          widget.onNoteAccepted(
-                            NoteData(
-                              content: _contentController.text,
-                              title: _titleController.text,
-                            ),
-                          );
-                        }
-                      },
+                      onPressed: onFinish,
                       child: const Text('Finish'),
                     ),
                   ],
@@ -162,6 +135,114 @@ class _NotesEditDialogState extends State<NotesEditDialog> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class NotesEditDialog extends StatefulWidget {
+  const NotesEditDialog({
+    super.key,
+    required this.onNoteAccepted,
+    this.title,
+    this.content,
+    required this.topText,
+  });
+
+  final void Function(NoteData) onNoteAccepted;
+  final String? title;
+  final String? content;
+  final String topText;
+
+  @override
+  State<NotesEditDialog> createState() => _NotesEditDialogState();
+}
+
+class _NotesEditDialogState extends State<NotesEditDialog> {
+  final _formKey = GlobalKey<FormState>();
+  late final _titleController = TextEditingController(text: widget.title);
+  late final _contentController = TextEditingController(text: widget.content);
+  final _titleFocusNode = FocusNode();
+
+  @override
+  void dispose() {
+    _titleFocusNode.dispose();
+    _titleController.dispose();
+    _contentController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    _titleFocusNode.requestFocus();
+    return _NotesEditDialogModel(
+      formKey: _formKey,
+      topText: widget.topText,
+      titleFocusNode: _titleFocusNode,
+      titleController: _titleController,
+      contentController: _contentController,
+      onCancel: Navigator.of(context).pop,
+      onFinish: () {
+        if (_formKey.currentState?.validate() ?? false) {
+          widget.onNoteAccepted(
+            NoteData(
+              content: _contentController.text,
+              title: _titleController.text,
+            ),
+          );
+          Navigator.of(context).pop();
+        }
+      },
+    );
+  }
+}
+
+class _NotesDeleteDialogModel extends StatelessWidget {
+  const _NotesDeleteDialogModel({
+    required this.onDelete,
+    required this.onCancel,
+  });
+
+  final void Function() onDelete;
+  final void Function() onCancel;
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Delete Note'),
+      content: const Text('Are you sure you want to delete this note?'),
+      actions: [
+        TextButton(
+          style: const ButtonStyle(
+            foregroundColor: WidgetStatePropertyAll(Colors.red),
+          ),
+          onPressed: onCancel,
+          child: const Text('Cancel'),
+        ),
+        TextButton(
+          style: const ButtonStyle(
+            foregroundColor: WidgetStatePropertyAll(Colors.red),
+          ),
+          onPressed: onDelete,
+          child: const Text('Delete'),
+        ),
+      ],
+    );
+  }
+}
+
+class NotesDeleteDialog extends StatelessWidget {
+  const NotesDeleteDialog({super.key, required this.onDelete});
+
+  final void Function() onDelete;
+
+  @override
+  Widget build(BuildContext context) {
+    return _NotesDeleteDialogModel(
+      onDelete: () {
+        onDelete();
+        Navigator.of(context).pop();
+      },
+      onCancel: Navigator.of(context).pop,
     );
   }
 }

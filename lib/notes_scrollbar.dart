@@ -1,5 +1,5 @@
+import 'package:assignment_2/notes_card.dart';
 import 'package:assignment_2/notes_database.dart';
-import 'package:assignment_2/notes_list.dart';
 import 'package:assignment_2/notes_pallette.dart';
 import 'package:flutter/material.dart';
 
@@ -20,45 +20,70 @@ class NotesEmptyBodyModel extends StatelessWidget {
   }
 }
 
-class NotesScrollbar extends StatelessWidget {
+class NotesScrollbar extends StatefulWidget {
   const NotesScrollbar(
       {super.key,
-      required this.database,
+      required this.notes,
       required this.onNoteEditted,
       required this.onNoteDeleted});
 
-  final NotesDatabaseAbstract database;
+  final List<NoteData> notes;
   final void Function(NoteData, int) onNoteEditted;
   final void Function(int) onNoteDeleted;
 
   @override
+  State<NotesScrollbar> createState() => _NotesScrollbarState();
+}
+
+class _NotesScrollbarState extends State<NotesScrollbar> {
+  @override
   Widget build(BuildContext context) {
-    return NotesScrollbarModel(
-      child: NotesList(
-        database: database,
-        onNoteEditted: onNoteEditted,
-        onNoteDeleted: onNoteDeleted,
-      ),
+    return _NotesScrollbarModel(
+      itemCount: widget.notes.length,
+      itemBuilder: (context, index) {
+        return NotesCard(
+          title: widget.notes[index].title,
+          content: widget.notes[index].content,
+          onNoteEditted: (note) {
+            widget.onNoteEditted(note, index);
+          },
+          onNoteDeleted: () {
+            widget.onNoteDeleted(index);
+          },
+        );
+      },
     );
   }
 }
 
-class NotesScrollbarModel extends StatelessWidget {
-  const NotesScrollbarModel({super.key, required this.child});
+class _NotesScrollbarModel extends StatelessWidget {
+  const _NotesScrollbarModel(
+      {required this.itemCount, required this.itemBuilder});
 
-  final Widget child;
+  final int itemCount;
+  final NullableIndexedWidgetBuilder itemBuilder;
 
   @override
   Widget build(BuildContext context) {
-    return Scrollbar(
+    return RawScrollbar(
       thickness: 8,
       radius: const Radius.circular(5),
       thumbVisibility: true,
+      trackColor: NotesPallette.cardIcon,
+      thumbColor: NotesPallette.cardIcon,
       child: Stack(
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 18, 0),
-            child: child,
+            child: ListView.separated(
+              // primary: true,
+              padding: const EdgeInsets.fromLTRB(0, 10, 0, 80),
+              itemCount: itemCount,
+              itemBuilder: itemBuilder,
+              separatorBuilder: (context, index) {
+                return const SizedBox(height: 10);
+              },
+            ),
           ),
           Align(
             alignment: Alignment.topCenter,
