@@ -44,8 +44,7 @@ class _NotesScrollbarState extends State<NotesScrollbar> {
             itemCount: widget.notes.length,
             itemBuilder: (context, index) {
               return NotesCard(
-                title: widget.notes[index].title,
-                content: widget.notes[index].content,
+                noteData: widget.notes[index],
                 onNoteEditted: (note) {
                   widget.onNoteEditted(note, index);
                 },

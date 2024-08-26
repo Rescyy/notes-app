@@ -1,11 +1,11 @@
 import 'package:assignment_2/notes_database.dart';
-import 'package:assignment_2/notes_dialog.dart';
+import 'package:assignment_2/notes_dialog/factory.dart';
 import 'package:assignment_2/notes_pallette.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
-class NotesContent extends TextSpan {
-  const NotesContent(String content)
+class _NotesContent extends TextSpan {
+  const _NotesContent(String content)
       : super(
           text: content,
           style: const TextStyle(
@@ -15,8 +15,8 @@ class NotesContent extends TextSpan {
         );
 }
 
-class NotesTitle extends TextSpan {
-  const NotesTitle(String title)
+class _NotesTitle extends TextSpan {
+  const _NotesTitle(String title)
       : super(
           text: title,
           style: const TextStyle(
@@ -27,25 +27,58 @@ class NotesTitle extends TextSpan {
         );
 }
 
-class _NotesCardModel extends StatelessWidget {
-  const _NotesCardModel({
-    required this.title,
-    required this.content,
-    required this.onNoteEditted,
-    required this.onNoteDeleted,
+class _NotesIconModel extends StatelessWidget {
+  const _NotesIconModel({
+    this.onTap,
+    this.onLongPress,
+    this.iconColor = NotesPallette.cardIcon,
+    required this.iconData,
   });
 
-  final String title;
-  final String content;
-  final void Function() onNoteEditted;
-  final void Function() onNoteDeleted;
+  final VoidCallback? onTap;
+  final VoidCallback? onLongPress;
+  final IconData iconData;
+  final Color iconColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: SizedBox.square(
+        dimension: 30,
+        child: Material(
+          color: Colors.transparent,
+          shape: const CircleBorder(),
+          child: InkWell(
+            customBorder: const CircleBorder(),
+            splashFactory: InkSplash.splashFactory,
+            splashColor: NotesPallette.cardIcon,
+            onTap: onTap,
+            onLongPress: onLongPress,
+            child: Icon(
+              iconData,
+              size: 20,
+              color: iconColor,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _NotesCardModel extends StatelessWidget {
+  const _NotesCardModel({required this.noteData, required this.icons});
+
+  final NoteData noteData;
+  final List<Widget> icons;
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        NotesTitle titleSpan = NotesTitle(title);
-        NotesContent contentSpan = NotesContent(content);
+        _NotesTitle titleSpan = _NotesTitle(noteData.title);
+        _NotesContent contentSpan = _NotesContent(noteData.content);
         final titleMaxWidth = constraints.maxWidth - 111;
         final titleHeight = (TextPainter(
           text: titleSpan,
@@ -58,12 +91,13 @@ class _NotesCardModel extends StatelessWidget {
         )..layout(maxWidth: constraints.maxWidth - 24))
             .height;
         const double tilePadding = 12;
-        const double delimiterHeight = 4;
+        const double delimiterHeight = 6;
         final double height = math
             .max(
                 titleHeight + contentHeight + 2 * tilePadding + delimiterHeight,
                 90)
             .toDouble();
+        final cardColor = NotesPallette.getNoteColor(noteData.title);
         // log('Title: $titleHeight Content: $contentHeight Total: $height');
 
         return Stack(
@@ -73,7 +107,7 @@ class _NotesCardModel extends StatelessWidget {
               width: double.infinity,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: NotesPallette.getNoteColor(title),
+                color: cardColor,
                 boxShadow: const [
                   BoxShadow(
                     blurRadius: 1,
@@ -99,18 +133,7 @@ class _NotesCardModel extends StatelessWidget {
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.edit, size: 20),
-                  color: NotesPallette.cardIcon,
-                  onPressed: onNoteEditted,
-                ),
-                IconButton(
-                  icon: const Icon(Icons.delete, size: 20),
-                  color: NotesPallette.cardIcon,
-                  onPressed: onNoteDeleted,
-                ),
-              ],
+              children: icons,
             ),
           ],
         );
@@ -119,34 +142,101 @@ class _NotesCardModel extends StatelessWidget {
   }
 }
 
+class _DefaultNotesCardModel extends _NotesCardModel {
+  _DefaultNotesCardModel({
+    required super.noteData,
+    required VoidCallback onNoteEditted,
+    required VoidCallback onNoteDeleted,
+    required VoidCallback onDeleteLongPress,
+  }) : super(
+          icons: [
+            _NotesIconModel(
+              onTap: onNoteDeleted,
+              iconData: Icons.edit,
+            ),
+            _NotesIconModel(
+              onTap: onNoteDeleted,
+              onLongPress: onDeleteLongPress,
+              iconData: Icons.delete_outline,
+            ),
+          ],
+        );
+}
+
+class _MultipleDeleteNotesIcon extends StatefulWidget {
+  const _MultipleDeleteNotesIcon({required this.onTap});
+
+  final void Function(bool) onTap;
+
+  @override
+  State<_MultipleDeleteNotesIcon> createState() =>
+      _MultipleDeleteNotesIconState();
+}
+
+class _MultipleDeleteNotesIconState extends State<_MultipleDeleteNotesIcon> {
+  bool _isSelected = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return _NotesIconModel(
+      onTap: () {
+        setState(() {
+          widget.onTap(_isSelected);
+          _isSelected = !_isSelected;
+        });
+      },
+      iconData: _isSelected ? Icons.delete : Icons.delete_outline,
+      iconColor: _isSelected ? Colors.red : NotesPallette.cardIcon,
+    );
+  }
+}
+
+class MultipleDeleteNotesCard extends StatelessWidget {
+  const MultipleDeleteNotesCard({
+    super.key,
+    required this.noteData,
+    required this.onTap,
+  });
+
+  final NoteData noteData;
+  final void Function(bool) onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return _NotesCardModel(
+      icons: [
+        _MultipleDeleteNotesIcon(onTap: onTap),
+      ],
+      noteData: noteData,
+    );
+  }
+}
+
 class NotesCard extends StatelessWidget {
   const NotesCard({
     super.key,
-    required this.title,
-    required this.content,
+    required this.noteData,
     required this.onNoteEditted,
     required this.onNoteDeleted,
   });
 
-  final String title;
-  final String content;
+  final NoteData noteData;
   final void Function(NoteData) onNoteEditted;
   final void Function() onNoteDeleted;
 
   @override
   Widget build(BuildContext context) {
-    return _NotesCardModel(
-      title: title,
-      content: content,
+    final dialogFactory = PlatformSpecificNotesDialogFactory(context);
+    return _DefaultNotesCardModel(
+      noteData: noteData,
       onNoteEditted: () {
         showDialog<void>(
           context: context,
           builder: (context) {
-            return NotesEditDialog(
-              title: title,
-              content: content,
+            return dialogFactory.createEditDialog(
               topText: 'Edit Note',
               onNoteAccepted: onNoteEditted,
+              noteData: noteData,
             );
           },
         );
@@ -155,12 +245,13 @@ class NotesCard extends StatelessWidget {
         showDialog<void>(
           context: context,
           builder: (context) {
-            return NotesDeleteDialog(
+            return dialogFactory.createDeleteDialog(
               onDelete: onNoteDeleted,
             );
           },
         );
       },
+      onDeleteLongPress: () {},
     );
   }
 }

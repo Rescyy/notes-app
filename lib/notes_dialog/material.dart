@@ -1,9 +1,27 @@
 import 'package:assignment_2/notes_database.dart';
+import 'package:assignment_2/notes_dialog/factory.dart';
 import 'package:assignment_2/notes_pallette.dart';
 import 'package:flutter/material.dart';
 
-class _NotesEditDialogModel extends StatelessWidget {
-  const _NotesEditDialogModel(
+class MaterialNotesDialogFactory extends NotesDialogFactory {
+  const MaterialNotesDialogFactory();
+  @override
+  NotesDeleteDialog createDeleteDialog({required void Function() onDelete}) {
+    return _MaterialNotesDeleteDialog(onDelete: onDelete);
+  }
+
+  @override
+  NotesEditDialog createEditDialog(
+      {required void Function(NoteData) onNoteAccepted,
+      NoteData? noteData,
+      required String topText}) {
+    return _MaterialNotesEditDialog(
+        onNoteAccepted: onNoteAccepted, topText: topText, noteData: noteData);
+  }
+}
+
+class _MaterialNotesEditDialogModel extends StatelessWidget {
+  const _MaterialNotesEditDialogModel(
       {required this.formKey,
       required this.topText,
       required this.titleFocusNode,
@@ -139,28 +157,24 @@ class _NotesEditDialogModel extends StatelessWidget {
   }
 }
 
-class NotesEditDialog extends StatefulWidget {
-  const NotesEditDialog({
-    super.key,
-    required this.onNoteAccepted,
-    this.title,
-    this.content,
-    required this.topText,
+class _MaterialNotesEditDialog extends NotesEditDialog {
+  const _MaterialNotesEditDialog({
+    required super.onNoteAccepted,
+    required super.topText,
+    super.noteData,
   });
 
-  final void Function(NoteData) onNoteAccepted;
-  final String? title;
-  final String? content;
-  final String topText;
-
   @override
-  State<NotesEditDialog> createState() => _NotesEditDialogState();
+  State<_MaterialNotesEditDialog> createState() =>
+      _MaterialNotesEditDialogState();
 }
 
-class _NotesEditDialogState extends State<NotesEditDialog> {
+class _MaterialNotesEditDialogState extends State<_MaterialNotesEditDialog> {
   final _formKey = GlobalKey<FormState>();
-  late final _titleController = TextEditingController(text: widget.title);
-  late final _contentController = TextEditingController(text: widget.content);
+  late final _titleController =
+      TextEditingController(text: widget.noteData?.title);
+  late final _contentController =
+      TextEditingController(text: widget.noteData?.content);
   final _titleFocusNode = FocusNode();
 
   @override
@@ -174,7 +188,7 @@ class _NotesEditDialogState extends State<NotesEditDialog> {
   @override
   Widget build(BuildContext context) {
     _titleFocusNode.requestFocus();
-    return _NotesEditDialogModel(
+    return _MaterialNotesEditDialogModel(
       formKey: _formKey,
       topText: widget.topText,
       titleFocusNode: _titleFocusNode,
@@ -196,8 +210,8 @@ class _NotesEditDialogState extends State<NotesEditDialog> {
   }
 }
 
-class _NotesDeleteDialogModel extends StatelessWidget {
-  const _NotesDeleteDialogModel({
+class _MaterialNotesDeleteDialogModel extends StatelessWidget {
+  const _MaterialNotesDeleteDialogModel({
     required this.onDelete,
     required this.onCancel,
   });
@@ -230,14 +244,12 @@ class _NotesDeleteDialogModel extends StatelessWidget {
   }
 }
 
-class NotesDeleteDialog extends StatelessWidget {
-  const NotesDeleteDialog({super.key, required this.onDelete});
-
-  final void Function() onDelete;
+class _MaterialNotesDeleteDialog extends NotesDeleteDialog {
+  const _MaterialNotesDeleteDialog({required super.onDelete});
 
   @override
   Widget build(BuildContext context) {
-    return _NotesDeleteDialogModel(
+    return _MaterialNotesDeleteDialogModel(
       onDelete: () {
         onDelete();
         Navigator.of(context).pop();
