@@ -2,12 +2,18 @@ import 'package:assignment_2/notes_database.dart';
 import 'package:assignment_2/notes_dialog/factory.dart';
 import 'package:assignment_2/notes_pallette.dart';
 import 'package:flutter/material.dart';
+// ignore: implementation_imports
+import 'package:flutter/src/material/dialog.dart' as material_dialog;
 
 class MaterialNotesDialogFactory extends NotesDialogFactory {
   const MaterialNotesDialogFactory();
   @override
   NotesDeleteDialog createDeleteDialog({required void Function() onDelete}) {
-    return _MaterialNotesDeleteDialog(onDelete: onDelete);
+    return _MaterialNotesDeleteDialog(
+      onDelete: onDelete,
+      warning: 'Are you sure you want to delete this note?',
+      topText: 'Delete Note?',
+    );
   }
 
   @override
@@ -33,13 +39,23 @@ class MaterialNotesDialogFactory extends NotesDialogFactory {
   }
 
   @override
-  void showDialogMethod({
+  void showDialog({
     required BuildContext context,
     required Widget Function(BuildContext context) builder,
   }) {
-    showDialog<void>(
+    material_dialog.showDialog<void>(
       context: context,
       builder: builder,
+    );
+  }
+
+  @override
+  NotesDeleteDialog createMultipleDeleteDialog(
+      {required void Function() onDelete, required int amount}) {
+    return _MaterialNotesDeleteDialog(
+      onDelete: onDelete,
+      warning: "Are you sure you want to\ndelete $amount ${amount > 1 ? "notes" : "note"}?",
+      topText: 'Delete notes?',
     );
   }
 }
@@ -240,16 +256,20 @@ class _MaterialNotesDeleteDialogModel extends StatelessWidget {
   const _MaterialNotesDeleteDialogModel({
     required this.onDelete,
     required this.onCancel,
+    required this.topText,
+    required this.warning,
   });
 
   final void Function() onDelete;
   final void Function() onCancel;
+  final String topText;
+  final String warning;
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Delete Note'),
-      content: const Text('Are you sure you want to delete this note?'),
+      title: Text(topText),
+      content: Text(warning),
       actions: [
         TextButton(
           style: const ButtonStyle(
@@ -271,7 +291,11 @@ class _MaterialNotesDeleteDialogModel extends StatelessWidget {
 }
 
 class _MaterialNotesDeleteDialog extends NotesDeleteDialog {
-  const _MaterialNotesDeleteDialog({required super.onDelete});
+  const _MaterialNotesDeleteDialog({
+    required super.onDelete,
+    required super.warning,
+    required super.topText,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -281,6 +305,8 @@ class _MaterialNotesDeleteDialog extends NotesDeleteDialog {
         Navigator.of(context).pop();
       },
       onCancel: Navigator.of(context).pop,
+      warning: warning,
+      topText: topText,
     );
   }
 }

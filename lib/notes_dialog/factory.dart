@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 abstract class NotesDialogFactory {
   const NotesDialogFactory();
 
-  void showDialogMethod({
+  void showDialog({
     required BuildContext context,
     required Widget Function(BuildContext context) builder,
   });
@@ -24,6 +24,11 @@ abstract class NotesDialogFactory {
   NotesDeleteDialog createDeleteDialog({
     required void Function() onDelete,
   });
+
+  NotesDeleteDialog createMultipleDeleteDialog({
+    required void Function() onDelete,
+    required int amount,
+  });
 }
 
 class PlatformSpecificNotesDialogFactory extends NotesDialogFactory {
@@ -37,10 +42,6 @@ class PlatformSpecificNotesDialogFactory extends NotesDialogFactory {
       return const MaterialNotesDialogFactory();
     }
   }
-
-  // static NotesDialogFactory _chooseFactory(BuildContext context) {
-  //   return const MaterialNotesDialogFactory();
-  // }
 
   final NotesDialogFactory factory;
 
@@ -73,14 +74,19 @@ class PlatformSpecificNotesDialogFactory extends NotesDialogFactory {
   }
 
   @override
-  void showDialogMethod({
+  void showDialog({
     required BuildContext context,
     required Widget Function(BuildContext context) builder,
   }) {
-    factory.showDialogMethod(
+    factory.showDialog(
       context: context,
       builder: builder,
     );
+  }
+  
+  @override
+  NotesDeleteDialog createMultipleDeleteDialog({required void Function() onDelete, required int amount}) {
+    return factory.createMultipleDeleteDialog(onDelete: onDelete, amount: amount);
   }
 }
 
@@ -97,7 +103,14 @@ abstract class NotesEditDialog extends StatefulWidget {
 }
 
 abstract class NotesDeleteDialog extends StatelessWidget {
-  const NotesDeleteDialog({super.key, required this.onDelete});
+  const NotesDeleteDialog({
+    super.key,
+    required this.onDelete,
+    required this.warning,
+    required this.topText,
+  });
 
+  final String topText;
+  final String warning;
   final void Function() onDelete;
 }

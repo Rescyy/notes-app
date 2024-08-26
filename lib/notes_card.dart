@@ -234,7 +234,7 @@ class NotesCard extends StatelessWidget {
     return _DefaultNotesCardModel(
       noteData: noteData,
       onNoteEditted: () {
-        dialogFactory.showDialogMethod(
+        dialogFactory.showDialog(
           context: context,
           builder: (context) {
             return dialogFactory.createEditDialog(
@@ -245,7 +245,7 @@ class NotesCard extends StatelessWidget {
         );
       },
       onNoteDeleted: () {
-        dialogFactory.showDialogMethod(
+        dialogFactory.showDialog(
           context: context,
           builder: (context) {
             return dialogFactory.createDeleteDialog(

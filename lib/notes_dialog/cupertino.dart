@@ -7,7 +7,11 @@ class CupertinoNotesDialogFactory extends NotesDialogFactory {
 
   @override
   NotesDeleteDialog createDeleteDialog({required void Function() onDelete}) {
-    return _CupertinoNotesDeleteDialog(onDelete: onDelete);
+    return _CupertinoNotesDeleteDialog(
+      onDelete: onDelete,
+      warning: 'Are you sure you want to delete this note?',
+      topText: 'Delete Note?',
+    );
   }
 
   @override
@@ -35,7 +39,17 @@ class CupertinoNotesDialogFactory extends NotesDialogFactory {
   }
 
   @override
-  void showDialogMethod({
+  NotesDeleteDialog createMultipleDeleteDialog(
+      {required void Function() onDelete, required int amount}) {
+    return _CupertinoNotesDeleteDialog(
+      onDelete: onDelete,
+      warning: "Are you sure you want to\ndelete $amount ${amount > 1 ? "notes" : "note"}?",
+      topText: 'Delete notes?',
+    );
+  }
+
+  @override
+  void showDialog({
     required BuildContext context,
     required Widget Function(BuildContext context) builder,
   }) {
@@ -44,26 +58,38 @@ class CupertinoNotesDialogFactory extends NotesDialogFactory {
 }
 
 class _CupertinoNotesDeleteDialog extends NotesDeleteDialog {
-  const _CupertinoNotesDeleteDialog({required super.onDelete});
+  const _CupertinoNotesDeleteDialog({
+    required super.onDelete,
+    required super.warning,
+    required super.topText,
+  });
 
   @override
   Widget build(BuildContext context) {
     return _CupertinoNotesDeleteDialogModel(
       onDelete: onDelete,
+      topText: topText,
+      warning: warning,
     );
   }
 }
 
 class _CupertinoNotesDeleteDialogModel extends StatelessWidget {
-  const _CupertinoNotesDeleteDialogModel({required this.onDelete});
+  const _CupertinoNotesDeleteDialogModel({
+    required this.onDelete,
+    required this.topText,
+    required this.warning,
+  });
 
   final void Function() onDelete;
+  final String topText;
+  final String warning;
 
   @override
   Widget build(BuildContext context) {
     return CupertinoAlertDialog(
-      title: const Text('Delete Note?'),
-      content: const Text('Are you sure you want to delete this note?'),
+      title: Text(topText),
+      content: Text(warning),
       actions: [
         CupertinoDialogAction(
           onPressed: () {

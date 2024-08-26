@@ -27,18 +27,21 @@ class NotesScrollbar extends StatelessWidget {
     required this.onNoteEditted,
     required this.onNoteDeleted,
     required this.onToggleMultipleDelete,
+    required this.scrollKey,
   });
 
   final List<NoteData> notes;
   final void Function(NoteData, int) onNoteEditted;
   final void Function(int) onNoteDeleted;
   final void Function(int) onToggleMultipleDelete;
+  final Key scrollKey;
 
   @override
   Widget build(BuildContext context) {
     return notes.isEmpty
         ? const NotesEmpty()
         : _NotesScrollbarModel(
+            scrollKey: scrollKey,
             itemCount: notes.length,
             itemBuilder: (context, index) {
               return NotesCard(
@@ -64,15 +67,18 @@ class NotesScrollbarMultipleDelete extends StatelessWidget {
     required this.notes,
     required this.onDeleteSelect,
     required this.selectedNotes,
+    required this.scrollKey,
   });
 
   final List<NoteData> notes;
   final void Function(bool, int) onDeleteSelect;
   final Set<int> selectedNotes;
+  final Key scrollKey;
 
   @override
   Widget build(BuildContext context) {
     return _NotesScrollbarModel(
+      scrollKey: scrollKey,
       itemCount: notes.length,
       itemBuilder: (context, index) {
         return NotesCardMultipleDelete(
@@ -88,11 +94,15 @@ class NotesScrollbarMultipleDelete extends StatelessWidget {
 }
 
 class _NotesScrollbarModel extends StatelessWidget {
-  const _NotesScrollbarModel(
-      {required this.itemCount, required this.itemBuilder});
+  const _NotesScrollbarModel({
+    required this.itemCount,
+    required this.itemBuilder,
+    required this.scrollKey,
+  });
 
   final int itemCount;
   final NullableIndexedWidgetBuilder itemBuilder;
+  final Key scrollKey;
 
   @override
   Widget build(BuildContext context) {
@@ -107,7 +117,7 @@ class _NotesScrollbarModel extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 18, 0),
             child: ListView.separated(
-              // primary: true,
+              key: scrollKey,
               padding: const EdgeInsets.fromLTRB(0, 10, 0, 80),
               itemCount: itemCount,
               itemBuilder: itemBuilder,
