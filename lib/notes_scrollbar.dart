@@ -20,40 +20,70 @@ class NotesEmpty extends StatelessWidget {
   }
 }
 
-class NotesScrollbar extends StatefulWidget {
-  const NotesScrollbar(
-      {super.key,
-      required this.notes,
-      required this.onNoteEditted,
-      required this.onNoteDeleted});
+class NotesScrollbar extends StatelessWidget {
+  const NotesScrollbar({
+    super.key,
+    required this.notes,
+    required this.onNoteEditted,
+    required this.onNoteDeleted,
+    required this.onToggleMultipleDelete,
+  });
 
   final List<NoteData> notes;
   final void Function(NoteData, int) onNoteEditted;
   final void Function(int) onNoteDeleted;
+  final void Function(int) onToggleMultipleDelete;
 
-  @override
-  State<NotesScrollbar> createState() => _NotesScrollbarState();
-}
-
-class _NotesScrollbarState extends State<NotesScrollbar> {
   @override
   Widget build(BuildContext context) {
-    return widget.notes.isEmpty
+    return notes.isEmpty
         ? const NotesEmpty()
         : _NotesScrollbarModel(
-            itemCount: widget.notes.length,
+            itemCount: notes.length,
             itemBuilder: (context, index) {
               return NotesCard(
-                noteData: widget.notes[index],
+                noteData: notes[index],
                 onNoteEditted: (note) {
-                  widget.onNoteEditted(note, index);
+                  onNoteEditted(note, index);
                 },
                 onNoteDeleted: () {
-                  widget.onNoteDeleted(index);
+                  onNoteDeleted(index);
+                },
+                onDeleteLongPress: () {
+                  onToggleMultipleDelete(index);
                 },
               );
             },
           );
+  }
+}
+
+class NotesScrollbarMultipleDelete extends StatelessWidget {
+  const NotesScrollbarMultipleDelete({
+    super.key,
+    required this.notes,
+    required this.onDeleteSelect,
+    required this.selectedNotes,
+  });
+
+  final List<NoteData> notes;
+  final void Function(bool, int) onDeleteSelect;
+  final Set<int> selectedNotes;
+
+  @override
+  Widget build(BuildContext context) {
+    return _NotesScrollbarModel(
+      itemCount: notes.length,
+      itemBuilder: (context, index) {
+        return NotesCardMultipleDelete(
+          noteData: notes[index],
+          onTap: (selected) {
+            onDeleteSelect(selected, index);
+          },
+          isSelected: selectedNotes.contains(index),
+        );
+      },
+    );
   }
 }
 

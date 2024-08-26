@@ -17,6 +17,8 @@ abstract class NotesDatabaseAbstract {
 
   void removeNote(int index);
 
+  void removeNotes(Iterable<int> indeces);
+
   void editNote(NoteData note, int index);
 
   void reworderNotes(int oldIndex, int newIndex) => throw UnimplementedError();
@@ -43,6 +45,14 @@ class NotesDatabase extends NotesDatabaseAbstract {
   @override
   void editNote(NoteData note, int index) {
     _notes[index] = note;
+  }
+
+  @override
+  void removeNotes(Iterable<int> index) {
+    final sortedIndex = index.toList()..sort((a, b) => b.compareTo(a));
+    for (final sortedIndex in sortedIndex) {
+      _notes.removeAt(sortedIndex);
+    }
   }
 }
 

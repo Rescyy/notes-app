@@ -164,9 +164,11 @@ class _DefaultNotesCardModel extends _NotesCardModel {
 }
 
 class _MultipleDeleteNotesIcon extends StatefulWidget {
-  const _MultipleDeleteNotesIcon({required this.onTap});
+  const _MultipleDeleteNotesIcon(
+      {required this.onTap, required this.isSelected});
 
   final void Function(bool) onTap;
+  final bool isSelected;
 
   @override
   State<_MultipleDeleteNotesIcon> createState() =>
@@ -174,38 +176,38 @@ class _MultipleDeleteNotesIcon extends StatefulWidget {
 }
 
 class _MultipleDeleteNotesIconState extends State<_MultipleDeleteNotesIcon> {
-  bool _isSelected = false;
-
   @override
   Widget build(BuildContext context) {
     return _NotesIconModel(
       onTap: () {
-        setState(() {
-          widget.onTap(_isSelected);
-          _isSelected = !_isSelected;
-        });
+        widget.onTap(!widget.isSelected);
       },
-      iconData: _isSelected ? Icons.delete : Icons.delete_outline,
-      iconColor: _isSelected ? Colors.red : NotesPallette.cardIcon,
+      iconData: widget.isSelected ? Icons.delete : Icons.delete_outline,
+      iconColor: widget.isSelected ? Colors.red : NotesPallette.cardIcon,
     );
   }
 }
 
-class MultipleDeleteNotesCard extends StatelessWidget {
-  const MultipleDeleteNotesCard({
+class NotesCardMultipleDelete extends StatelessWidget {
+  const NotesCardMultipleDelete({
     super.key,
     required this.noteData,
     required this.onTap,
+    required this.isSelected,
   });
 
   final NoteData noteData;
   final void Function(bool) onTap;
+  final bool isSelected;
 
   @override
   Widget build(BuildContext context) {
     return _NotesCardModel(
       icons: [
-        _MultipleDeleteNotesIcon(onTap: onTap),
+        _MultipleDeleteNotesIcon(
+          onTap: onTap,
+          isSelected: isSelected,
+        ),
       ],
       noteData: noteData,
     );
@@ -218,11 +220,13 @@ class NotesCard extends StatelessWidget {
     required this.noteData,
     required this.onNoteEditted,
     required this.onNoteDeleted,
+    required this.onDeleteLongPress,
   });
 
   final NoteData noteData;
   final void Function(NoteData) onNoteEditted;
   final void Function() onNoteDeleted;
+  final void Function() onDeleteLongPress;
 
   @override
   Widget build(BuildContext context) {
@@ -250,7 +254,7 @@ class NotesCard extends StatelessWidget {
           },
         );
       },
-      onDeleteLongPress: () {},
+      onDeleteLongPress: onDeleteLongPress,
     );
   }
 }

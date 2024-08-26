@@ -8,59 +8,127 @@ class NotesBody extends StatefulWidget {
   const NotesBody({super.key});
 
   @override
-  State<NotesBody> createState() => _NotesBodyState();
+  State<NotesBody> createState() => _NotesBodyController();
 }
 
-class _NotesBodyState extends State<NotesBody> {
+class _NotesBodyController extends State<NotesBody> {
+
+  late _NotesState _state = _NotesDefaultState(controller: this);
+
   final NotesDatabaseAbstract database = BibleNotesDatabase();
-  // final NotesDatabaseAbstract database = NotesDatabase();
-  bool showBottom = false;
+
+  void changeState(_NotesState state) {
+    super.setState(() {
+      _state = state;
+    });
+  }
+
+  @override
+  void setState(void Function() fn) {
+    super.setState(fn);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _state.build(context);
+  }
+}
+
+abstract class _NotesState {
+  _NotesState({
+    required this.controller,
+  });
+  final _NotesBodyController controller;
+  Widget build(BuildContext context);
+}
+
+class _NotesDefaultState extends _NotesState {
+  _NotesDefaultState({
+    required super.controller,
+  });
 
   @override
   Widget build(BuildContext context) {
     final dialogFactory = PlatformSpecificNotesDialogFactory(context);
     return _NotesBodyModel(
-      floatingActionButton: showBottom
-          ? null
-          : _NoteAddActionButtonModel(
+      floatingActionButton: _NoteAddActionButtonModel(
+        onPressed: () {
+          dialogFactory.showDialogMethod(
+            context: context,
+            builder: (context) {
+              return dialogFactory.createAddDialog(
+                onNoteAccepted: (NoteData note) {
+                  controller.setState(() {
+                    controller.database.addNote(note);
+                  });
+                },
+              );
+            },
+          );
+        },
+      ),
+      child: NotesScrollbar(
+          notes: controller.database.notes,
+          onNoteEditted: (note, index) {
+            controller.setState(() {
+              controller.database.editNote(note, index);
+            });
+          },
+          onNoteDeleted: (index) {
+            controller.setState(() {
+              controller.database.removeNote(index);
+            });
+          },
+          onToggleMultipleDelete: (index) {
+            controller.changeState(
+              _NotesMultipleDeleteState(
+                  controller: controller, selectedNote: index),
+            );
+          }),
+    );
+  }
+}
+
+class _NotesMultipleDeleteState extends _NotesState {
+  _NotesMultipleDeleteState({
+    required super.controller,
+    required int selectedNote,
+  }) : selectedNotes = {selectedNote};
+
+  Set<int> selectedNotes;
+
+  @override
+  Widget build(BuildContext context) {
+    return _NotesBodyModel(
+      persistentFooterButtons: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextButton(
+              child: Text('Delete (${selectedNotes.length})'),
               onPressed: () {
-                dialogFactory.showDialogMethod(
-                  context: context,
-                  builder: (context) {
-                    return dialogFactory.createAddDialog(
-                      onNoteAccepted: (NoteData note) {
-                        setState(() {
-                          database.addNote(note);
-                        });
-                      },
-                    );
-                  },
+                controller.database.removeNotes(selectedNotes);
+                controller.changeState(
+                  _NotesDefaultState(
+                    controller: controller,
+                  ),
                 );
               },
             ),
-      persistentFooterButtons: !showBottom
-          ? null
-          : [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TextButton(
-                    child: const Text('Yes'),
-                    onPressed: () {},
+            TextButton(child: const Text('Cancel'), onPressed: () {controller.changeState(
+                  _NotesDefaultState(
+                    controller: controller,
                   ),
-                ],
-              )
-            ],
-      child: NotesScrollbar(
-        notes: database.notes,
-        onNoteEditted: (note, index) {
-          setState(() {
-            database.editNote(note, index);
-          });
-        },
-        onNoteDeleted: (index) {
-          setState(() {
-            database.removeNote(index);
+                );})
+          ],
+        )
+      ],
+      child: NotesScrollbarMultipleDelete(
+        notes: controller.database.notes,
+        selectedNotes: selectedNotes,
+        onDeleteSelect: (selected, index) {
+          controller.setState(() {
+            selected ? selectedNotes.add(index) : selectedNotes.remove(index);
           });
         },
       ),

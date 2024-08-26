@@ -176,8 +176,8 @@ class _CupertinoNotesEditDialogModel extends StatelessWidget {
             const Text('Content'),
             CupertinoTextFormFieldRow(
               maxLength: 200,
-              minLines: 11,
-              maxLines: 11,
+              minLines: 4,
+              maxLines: 4,
               controller: contentController,
               decoration: BoxDecoration(
                 border: Border.all(color: CupertinoColors.systemGrey),
