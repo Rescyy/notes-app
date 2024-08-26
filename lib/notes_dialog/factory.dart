@@ -6,6 +6,11 @@ import 'package:flutter/material.dart';
 abstract class NotesDialogFactory {
   const NotesDialogFactory();
 
+  void showDialogMethod({
+    required BuildContext context,
+    required Widget Function(BuildContext context) builder,
+  });
+
   NotesEditDialog createEditDialog({
     required void Function(NoteData) onNoteAccepted,
     NoteData? noteData,
@@ -32,6 +37,10 @@ class PlatformSpecificNotesDialogFactory extends NotesDialogFactory {
       return const MaterialNotesDialogFactory();
     }
   }
+
+  // static NotesDialogFactory _chooseFactory(BuildContext context) {
+  //   return const MaterialNotesDialogFactory();
+  // }
 
   final NotesDialogFactory factory;
 
@@ -60,6 +69,17 @@ class PlatformSpecificNotesDialogFactory extends NotesDialogFactory {
     return factory.createAddDialog(
       onNoteAccepted: onNoteAccepted,
       noteData: noteData,
+    );
+  }
+
+  @override
+  void showDialogMethod({
+    required BuildContext context,
+    required Widget Function(BuildContext context) builder,
+  }) {
+    factory.showDialogMethod(
+      context: context,
+      builder: builder,
     );
   }
 }

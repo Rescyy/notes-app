@@ -24,9 +24,8 @@ class _NotesBodyState extends State<NotesBody> {
           ? null
           : _NoteAddActionButtonModel(
               onPressed: () {
-                showDialog<void>(
+                dialogFactory.showDialogMethod(
                   context: context,
-                  barrierDismissible: false,
                   builder: (context) {
                     return dialogFactory.createAddDialog(
                       onNoteAccepted: (NoteData note) {
@@ -52,11 +51,6 @@ class _NotesBodyState extends State<NotesBody> {
                 ],
               )
             ],
-      onLeadingPressed: () {
-        setState(() {
-          showBottom = !showBottom;
-        });
-      },
       child: NotesScrollbar(
         notes: database.notes,
         onNoteEditted: (note, index) {
@@ -77,14 +71,12 @@ class _NotesBodyState extends State<NotesBody> {
 class _NotesBodyModel extends StatelessWidget {
   const _NotesBodyModel({
     required this.child,
-    required this.onLeadingPressed,
     this.floatingActionButton,
     this.persistentFooterButtons,
   });
 
   final Widget? floatingActionButton;
   final List<Widget>? persistentFooterButtons;
-  final void Function() onLeadingPressed;
   final Widget child;
 
   @override
@@ -92,10 +84,6 @@ class _NotesBodyModel extends StatelessWidget {
     return Scaffold(
       backgroundColor: NotesPallette.background,
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.menu),
-          onPressed: onLeadingPressed,
-        ),
         scrolledUnderElevation: 0.0,
         backgroundColor: NotesPallette.background,
         title: const Text('Notes'),

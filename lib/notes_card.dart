@@ -151,7 +151,7 @@ class _DefaultNotesCardModel extends _NotesCardModel {
   }) : super(
           icons: [
             _NotesIconModel(
-              onTap: onNoteDeleted,
+              onTap: onNoteEditted,
               iconData: Icons.edit,
             ),
             _NotesIconModel(
@@ -230,7 +230,7 @@ class NotesCard extends StatelessWidget {
     return _DefaultNotesCardModel(
       noteData: noteData,
       onNoteEditted: () {
-        showDialog<void>(
+        dialogFactory.showDialogMethod(
           context: context,
           builder: (context) {
             return dialogFactory.createEditDialog(
@@ -241,7 +241,7 @@ class NotesCard extends StatelessWidget {
         );
       },
       onNoteDeleted: () {
-        showDialog<void>(
+        dialogFactory.showDialogMethod(
           context: context,
           builder: (context) {
             return dialogFactory.createDeleteDialog(

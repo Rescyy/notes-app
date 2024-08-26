@@ -31,6 +31,17 @@ class MaterialNotesDialogFactory extends NotesDialogFactory {
         topText: "Edit Note",
         noteData: noteData);
   }
+
+  @override
+  void showDialogMethod({
+    required BuildContext context,
+    required Widget Function(BuildContext context) builder,
+  }) {
+    showDialog<void>(
+      context: context,
+      builder: builder,
+    );
+  }
 }
 
 class _MaterialNotesEditDialogModel extends StatelessWidget {
@@ -53,6 +64,7 @@ class _MaterialNotesEditDialogModel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // return empty container
     return Dialog(
       backgroundColor: NotesPallette.dialogBackground,
       child: Form(
@@ -104,6 +116,7 @@ class _MaterialNotesEditDialogModel extends StatelessWidget {
                   controller: contentController,
                   maxLength: 200,
                   maxLines: 7,
+                  minLines: 7,
                   cursorWidth: 1.5,
                   style: const TextStyle(fontSize: 15),
                   validator: (value) {
