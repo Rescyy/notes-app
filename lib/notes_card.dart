@@ -234,7 +234,6 @@ class NotesCard extends StatelessWidget {
           context: context,
           builder: (context) {
             return dialogFactory.createEditDialog(
-              topText: 'Edit Note',
               onNoteAccepted: onNoteEditted,
               noteData: noteData,
             );

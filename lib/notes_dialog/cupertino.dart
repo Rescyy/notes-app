@@ -11,9 +11,20 @@ class CupertinoNotesDialogFactory extends NotesDialogFactory {
   }
 
   @override
-  NotesEditDialog createEditDialog({required void Function(NoteData p1) onNoteAccepted, NoteData? noteData, required String topText}) {
+  NotesEditDialog createEditDialog({
+    required void Function(NoteData p1) onNoteAccepted,
+    NoteData? noteData,
+  }) {
     // TODO: implement createEditDialog
     throw UnimplementedError();
   }
 
+  @override
+  NotesEditDialog createAddDialog({
+    required void Function(NoteData p1) onNoteAccepted,
+    NoteData? noteData,
+  }) {
+    // TODO: implement createAddDialog
+    throw UnimplementedError();
+  }
 }

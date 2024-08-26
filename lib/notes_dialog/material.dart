@@ -11,12 +11,25 @@ class MaterialNotesDialogFactory extends NotesDialogFactory {
   }
 
   @override
-  NotesEditDialog createEditDialog(
-      {required void Function(NoteData) onNoteAccepted,
-      NoteData? noteData,
-      required String topText}) {
+  NotesEditDialog createEditDialog({
+    required void Function(NoteData) onNoteAccepted,
+    NoteData? noteData,
+  }) {
     return _MaterialNotesEditDialog(
-        onNoteAccepted: onNoteAccepted, topText: topText, noteData: noteData);
+        onNoteAccepted: onNoteAccepted,
+        topText: "New Note",
+        noteData: noteData);
+  }
+
+  @override
+  NotesEditDialog createAddDialog({
+    required void Function(NoteData p1) onNoteAccepted,
+    NoteData? noteData,
+  }) {
+    return _MaterialNotesEditDialog(
+        onNoteAccepted: onNoteAccepted,
+        topText: "Edit Note",
+        noteData: noteData);
   }
 }
 

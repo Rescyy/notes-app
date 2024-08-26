@@ -28,8 +28,7 @@ class _NotesBodyState extends State<NotesBody> {
                   context: context,
                   barrierDismissible: false,
                   builder: (context) {
-                    return dialogFactory.createEditDialog(
-                      topText: "New Note",
+                    return dialogFactory.createAddDialog(
                       onNoteAccepted: (NoteData note) {
                         setState(() {
                           database.addNote(note);

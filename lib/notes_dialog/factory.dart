@@ -5,11 +5,20 @@ import 'package:flutter/material.dart';
 
 abstract class NotesDialogFactory {
   const NotesDialogFactory();
-  NotesEditDialog createEditDialog(
-      {required void Function(NoteData) onNoteAccepted,
-      NoteData? noteData,
-      required String topText});
-  NotesDeleteDialog createDeleteDialog({required void Function() onDelete});
+
+  NotesEditDialog createEditDialog({
+    required void Function(NoteData) onNoteAccepted,
+    NoteData? noteData,
+  });
+
+  NotesEditDialog createAddDialog({
+    required void Function(NoteData) onNoteAccepted,
+    NoteData? noteData,
+  });
+
+  NotesDeleteDialog createDeleteDialog({
+    required void Function() onDelete,
+  });
 }
 
 class PlatformSpecificNotesDialogFactory extends NotesDialogFactory {
@@ -34,14 +43,23 @@ class PlatformSpecificNotesDialogFactory extends NotesDialogFactory {
   }
 
   @override
-  NotesEditDialog createEditDialog(
-      {required void Function(NoteData p1) onNoteAccepted,
-      NoteData? noteData,
-      required String topText}) {
+  NotesEditDialog createEditDialog({
+    required void Function(NoteData p1) onNoteAccepted,
+    NoteData? noteData,
+  }) {
     return factory.createEditDialog(
       onNoteAccepted: onNoteAccepted,
       noteData: noteData,
-      topText: topText,
+    );
+  }
+
+  @override
+  NotesEditDialog createAddDialog(
+      {required void Function(NoteData p1) onNoteAccepted,
+      NoteData? noteData}) {
+    return factory.createAddDialog(
+      onNoteAccepted: onNoteAccepted,
+      noteData: noteData,
     );
   }
 }
