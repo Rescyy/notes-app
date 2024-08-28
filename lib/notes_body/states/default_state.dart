@@ -1,6 +1,6 @@
 import 'package:assignment_2/notes_body/models/add_action_button.dart';
 import 'package:assignment_2/notes_body/models/body.dart';
-import 'package:assignment_2/notes_body/states/interface_state.dart';
+import 'package:assignment_2/notes_body/states/abstract_state.dart';
 import 'package:assignment_2/notes_body/states/multiple_delete_state.dart';
 import 'package:assignment_2/notes_database/dataclass.dart';
 import 'package:assignment_2/notes_dialog/abstract/factory.dart';
@@ -45,12 +45,13 @@ class NotesDefaultState extends NotesState {
               controller.database.removeNote(index);
             });
           },
-          onToggleMultipleDelete: (index) {
-            controller.changeState(
-              NotesMultipleDeleteState(
-                  controller: controller, selectedNote: index),
-            );
-          }),
+          onToggleMultipleDelete: toMultipleDelete),
     );
+  }
+}
+
+extension ToDefault on NotesState {
+  void toDefault() {
+    controller.changeState(NotesDefaultState(controller: controller));
   }
 }

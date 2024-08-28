@@ -26,7 +26,7 @@ class NotesBodyModel extends StatelessWidget {
       persistentFooterButtons: persistentFooterButtons,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(12, 12, 4, 0),
+          padding: const EdgeInsets.all(12),
           child: child,
         ),
       ),

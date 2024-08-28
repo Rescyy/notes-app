@@ -1,6 +1,7 @@
 import 'package:assignment_2/notes_body/models/body.dart';
+import 'package:assignment_2/notes_body/models/footer_button.dart';
 import 'package:assignment_2/notes_body/states/default_state.dart';
-import 'package:assignment_2/notes_body/states/interface_state.dart';
+import 'package:assignment_2/notes_body/states/abstract_state.dart';
 import 'package:assignment_2/notes_dialog/abstract/factory.dart';
 import 'package:assignment_2/notes_scrollbar/multiple_delete.dart';
 import 'package:flutter/material.dart';
@@ -21,8 +22,8 @@ class NotesMultipleDeleteState extends NotesState {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            TextButton(
-              child: Text('Delete (${selectedNotes.length})'),
+            NotesFooterButtonModel(
+              text: 'Delete (${selectedNotes.length})',
               onPressed: () {
                 if (selectedNotes.isEmpty) {
                   return;
@@ -34,22 +35,17 @@ class NotesMultipleDeleteState extends NotesState {
                       amount: selectedNotes.length,
                       onDelete: () {
                         controller.database.removeNotes(selectedNotes);
-                        controller.changeState(
-                          NotesDefaultState(controller: controller),
-                        );
+                        toDefault();
                       },
                     );
                   },
                 );
               },
             ),
-            TextButton(
-                child: const Text('Cancel'),
-                onPressed: () {
-                  controller.changeState(
-                    NotesDefaultState(controller: controller),
-                  );
-                })
+            NotesFooterButtonModel(
+              text: 'Cancel',
+              onPressed: toDefault,
+            )
           ],
         )
       ],
@@ -63,6 +59,14 @@ class NotesMultipleDeleteState extends NotesState {
           });
         },
       ),
+    );
+  }
+}
+
+extension ToMultipleDelete on NotesState {
+  void toMultipleDelete(int index) {
+    controller.changeState(
+      NotesMultipleDeleteState(controller: controller, selectedNote: index),
     );
   }
 }

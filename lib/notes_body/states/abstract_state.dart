@@ -1,4 +1,5 @@
 import 'package:assignment_2/notes_body/controller.dart';
+import 'package:assignment_2/notes_body/states/default_state.dart';
 import 'package:flutter/material.dart';
 
 abstract class NotesState {
@@ -7,4 +8,9 @@ abstract class NotesState {
   });
   final NotesBodyController controller;
   Widget build(BuildContext context);
+
+  factory NotesState.init({
+    required NotesBodyController controller,
+  }) =>
+      NotesDefaultState(controller: controller);
 }
