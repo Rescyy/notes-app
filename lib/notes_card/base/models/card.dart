@@ -57,7 +57,8 @@ class NotesCardModel extends StatelessWidget {
                 titleHeight + contentHeight + 2 * tilePadding + delimiterHeight,
                 90)
             .toDouble();
-        final cardColor = NotesPallette.getNoteColor(noteData.title);
+        final cardColor =
+            NotesPallette.of(context).getNoteColor(noteData.title);
         // log('Title: $titleHeight Content: $contentHeight Total: $height');
 
         return Stack(
@@ -68,11 +69,11 @@ class NotesCardModel extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 color: cardColor,
-                boxShadow: const [
+                boxShadow: [
                   BoxShadow(
                     blurRadius: 1,
-                    color: NotesPallette.noteShadow,
-                    offset: Offset(0, 3),
+                    color: NotesPallette.of(context).boxShadow,
+                    offset: const Offset(0, 3),
                   ),
                 ],
               ),

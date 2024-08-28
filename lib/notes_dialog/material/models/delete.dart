@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class MaterialNotesDeleteDialogModel extends StatelessWidget {
-  const MaterialNotesDeleteDialogModel({super.key, 
+  const MaterialNotesDeleteDialogModel({
+    super.key,
     required this.onDelete,
     required this.onCancel,
     required this.topText,
@@ -16,19 +17,29 @@ class MaterialNotesDeleteDialogModel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(topText),
+      title: Text(
+        topText,
+        textAlign: TextAlign.center,
+      ),
       content: Text(warning),
       actions: [
-        TextButton(
-          style: const ButtonStyle(
-            foregroundColor: WidgetStatePropertyAll(Colors.red),
+        ElevatedButton(
+          style: ButtonStyle(
+            foregroundColor: WidgetStatePropertyAll(
+              Theme.of(context).colorScheme.onSecondary,
+            ),
           ),
           onPressed: onCancel,
           child: const Text('Cancel'),
         ),
-        TextButton(
-          style: const ButtonStyle(
-            foregroundColor: WidgetStatePropertyAll(Colors.red),
+        ElevatedButton(
+          style: ButtonStyle(
+            backgroundColor: WidgetStatePropertyAll(
+              Theme.of(context).colorScheme.secondary,
+            ),
+            foregroundColor: WidgetStatePropertyAll(
+              Theme.of(context).colorScheme.onSecondary,
+            ),
           ),
           onPressed: onDelete,
           child: const Text('Delete'),

@@ -1,4 +1,3 @@
-import 'package:assignment_2/notes_pallette.dart';
 import 'package:flutter/material.dart';
 
 class NotesBodyModel extends StatelessWidget {
@@ -16,10 +15,8 @@ class NotesBodyModel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: NotesPallette.background,
       appBar: AppBar(
         scrolledUnderElevation: 0.0,
-        backgroundColor: NotesPallette.background,
         title: const Text('Notes'),
       ),
       floatingActionButton: floatingActionButton,

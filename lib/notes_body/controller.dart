@@ -5,11 +5,13 @@ import 'package:assignment_2/notes_database/bible.dart';
 import 'package:flutter/material.dart';
 
 class NotesBodyController extends State<NotesBody> {
-  late NotesState _state = NotesState.init(controller: this);
-  final scrollController = ScrollController();
 
-  final Key scrollKey = const PageStorageKey('notes');
-  final NotesDatabaseAbstract database = BibleNotesDatabase();
+  final Key _scrollKey = const PageStorageKey('notes');
+  final NotesDatabaseAbstract _database = BibleNotesDatabase();
+  late NotesState _state = NotesState.init(controller: this);
+
+  Key get scrollKey => _scrollKey;
+  NotesDatabaseAbstract get database => _database;
 
   void changeState(NotesState state) {
     super.setState(() {

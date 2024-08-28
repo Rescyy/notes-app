@@ -1,9 +1,9 @@
-import 'package:assignment_2/notes_pallette.dart';
 import 'package:flutter/material.dart';
 
 class MaterialNotesEditDialogModel extends StatelessWidget {
   const MaterialNotesEditDialogModel(
-      {super.key, required this.formKey,
+      {super.key,
+      required this.formKey,
       required this.topText,
       required this.titleFocusNode,
       required this.titleController,
@@ -21,9 +21,7 @@ class MaterialNotesEditDialogModel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // return empty container
     return Dialog(
-      backgroundColor: NotesPallette.dialogBackground,
       child: Form(
         key: formKey,
         child: SizedBox(
@@ -36,9 +34,10 @@ class MaterialNotesEditDialogModel extends StatelessWidget {
                 Center(
                   child: Text(
                     topText,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.onPrimary,
                     ),
                   ),
                 ),
@@ -48,7 +47,10 @@ class MaterialNotesEditDialogModel extends StatelessWidget {
                   controller: titleController,
                   maxLength: 30,
                   cursorWidth: 1.5,
-                  style: const TextStyle(fontSize: 15),
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Theme.of(context).colorScheme.onPrimary,
+                  ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Title Field is Required';
@@ -56,11 +58,9 @@ class MaterialNotesEditDialogModel extends StatelessWidget {
                     return null;
                   },
                   minLines: 1,
-                  cursorColor: NotesPallette.buttonTextDark,
-                  cursorErrorColor: NotesPallette.buttonTextDark,
+                  cursorErrorColor: Theme.of(context).colorScheme.error,
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor: NotesPallette.note,
                     border: OutlineInputBorder(
                       borderSide: BorderSide.none,
                       borderRadius: BorderRadius.circular(20),
@@ -75,18 +75,19 @@ class MaterialNotesEditDialogModel extends StatelessWidget {
                   maxLines: 7,
                   minLines: 7,
                   cursorWidth: 1.5,
-                  style: const TextStyle(fontSize: 15),
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Theme.of(context).colorScheme.onPrimary,
+                  ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Content Field is Required';
                     }
                     return null;
                   },
-                  cursorColor: NotesPallette.buttonTextDark,
-                  cursorErrorColor: NotesPallette.buttonTextDark,
+                  cursorErrorColor: Theme.of(context).colorScheme.error,
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor: NotesPallette.note,
                     border: OutlineInputBorder(
                       borderSide: BorderSide.none,
                       borderRadius: BorderRadius.circular(20),
@@ -99,15 +100,12 @@ class MaterialNotesEditDialogModel extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     ElevatedButton(
-                      style: const ButtonStyle(
+                      style: ButtonStyle(
                         backgroundColor: WidgetStatePropertyAll(
-                          NotesPallette.note,
+                          Theme.of(context).primaryColor,
                         ),
                         foregroundColor: WidgetStatePropertyAll(
-                          NotesPallette.buttonTextDark,
-                        ),
-                        overlayColor: WidgetStatePropertyAll(
-                          NotesPallette.splashColor,
+                          Theme.of(context).colorScheme.onPrimary,
                         ),
                       ),
                       onPressed: onCancel,
@@ -115,19 +113,16 @@ class MaterialNotesEditDialogModel extends StatelessWidget {
                     ),
                     const Spacer(),
                     ElevatedButton(
-                      style: const ButtonStyle(
+                      style: ButtonStyle(
                         backgroundColor: WidgetStatePropertyAll(
-                          NotesPallette.floatingButton,
+                          Theme.of(context).colorScheme.secondary,
                         ),
                         foregroundColor: WidgetStatePropertyAll(
-                          NotesPallette.buttonTextDark,
-                        ),
-                        overlayColor: WidgetStatePropertyAll(
-                          NotesPallette.splashColor,
+                          Theme.of(context).colorScheme.error,
                         ),
                       ),
                       onPressed: onFinish,
-                      child: const Text('Finish'),
+                      child: const Text('Save'),
                     ),
                   ],
                 ),

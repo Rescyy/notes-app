@@ -1,4 +1,3 @@
-import 'package:assignment_2/notes_pallette.dart';
 import 'package:flutter/material.dart';
 
 class NotesScrollbarModel extends StatelessWidget {
@@ -29,13 +28,13 @@ class NotesScrollbarModel extends StatelessWidget {
         Align(
           alignment: Alignment.topCenter,
           child: Container(
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  NotesPallette.background,
-                  NotesPallette.backgroundTransparent
+                  Theme.of(context).colorScheme.surface,
+                  Theme.of(context).colorScheme.onSurface,
                 ],
               ),
             ),
@@ -45,13 +44,13 @@ class NotesScrollbarModel extends StatelessWidget {
         Align(
           alignment: Alignment.bottomCenter,
           child: Container(
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.bottomCenter,
                 end: Alignment.topCenter,
                 colors: [
-                  NotesPallette.background,
-                  NotesPallette.backgroundTransparent
+                  Theme.of(context).colorScheme.surface,
+                  Theme.of(context).colorScheme.onSurface,
                 ],
               ),
             ),

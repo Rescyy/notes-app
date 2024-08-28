@@ -1,3 +1,4 @@
+import 'package:assignment_2/notes_pallette.dart';
 import 'package:flutter/cupertino.dart';
 
 class CupertinoNotesEditDialogModel extends StatelessWidget {
@@ -68,11 +69,21 @@ class CupertinoNotesEditDialogModel extends StatelessWidget {
       actions: [
         CupertinoDialogAction(
           onPressed: onCancel,
-          child: const Text('Cancel'),
+          child: Text(
+            'Cancel',
+            style: TextStyle(
+              color: NotesPallette.of(context).cupertinoDialogActionNegative,
+            ),
+          ),
         ),
         CupertinoDialogAction(
           onPressed: onFinish,
-          child: const Text('Save'),
+          child: Text(
+            'Save',
+            style: TextStyle(
+              color: NotesPallette.of(context).cupertinoDialogActionPositive,
+            ),
+          ),
         ),
       ],
     );

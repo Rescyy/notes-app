@@ -6,14 +6,14 @@ class NotesIconModel extends StatelessWidget {
     super.key,
     this.onTap,
     this.onLongPress,
-    this.iconColor = NotesPallette.cardIcon,
+    this.iconColor,
     required this.iconData,
   });
 
   final VoidCallback? onTap;
   final VoidCallback? onLongPress;
   final IconData iconData;
-  final Color iconColor;
+  final Color? iconColor;
 
   @override
   Widget build(BuildContext context) {

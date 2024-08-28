@@ -1,4 +1,5 @@
 import 'package:assignment_2/notes_body/class.dart';
+import 'package:assignment_2/notes_pallette.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -10,8 +11,10 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: NotesBody(),
+    return MaterialApp(
+      themeMode: ThemeMode.system,
+      theme: NotesPallette.lightTheme,
+      home: const NotesBody(),
     );
   }
 }

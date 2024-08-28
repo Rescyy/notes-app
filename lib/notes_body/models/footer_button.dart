@@ -1,4 +1,3 @@
-import 'package:assignment_2/notes_pallette.dart';
 import 'package:flutter/material.dart';
 
 class NotesFooterButtonModel extends StatelessWidget {
@@ -18,7 +17,7 @@ class NotesFooterButtonModel extends StatelessWidget {
       child: Text(
         text,
         style: const TextStyle(
-          color: NotesPallette.buttonTextDark,
+          // color: NotesPallette.buttonTextDark,
         ),
       ),
     );
