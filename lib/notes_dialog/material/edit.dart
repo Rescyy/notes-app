@@ -10,6 +10,18 @@ class MaterialNotesEditDialog extends NotesEditDialog {
     super.noteData,
   });
 
+  const MaterialNotesEditDialog.edit({
+    super.key,
+    required super.onNoteAccepted,
+    super.noteData,
+  }) : super.edit();
+
+  const MaterialNotesEditDialog.add({
+    super.key,
+    required super.onNoteAccepted,
+    super.noteData,
+  }) : super.add();
+
   @override
   State<MaterialNotesEditDialog> createState() =>
       MaterialNotesEditDialogState();

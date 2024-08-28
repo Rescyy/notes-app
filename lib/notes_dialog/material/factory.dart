@@ -12,12 +12,9 @@ class MaterialNotesDialogFactory extends NotesDialogFactory {
   const MaterialNotesDialogFactory();
 
   @override
-  AbstractNotesDeleteDialog createDeleteDialog(
-      {required void Function() onDelete}) {
-    return MaterialNotesDeleteDialog(
+  NotesDeleteDialog createDeleteDialog({required void Function() onDelete}) {
+    return MaterialNotesDeleteDialog.delete(
       onDelete: onDelete,
-      warning: 'Are you sure you want to delete this note?',
-      topText: 'Delete Note?',
     );
   }
 
@@ -26,10 +23,10 @@ class MaterialNotesDialogFactory extends NotesDialogFactory {
     required void Function(NoteData) onNoteAccepted,
     NoteData? noteData,
   }) {
-    return MaterialNotesEditDialog(
-        onNoteAccepted: onNoteAccepted,
-        topText: "New Note",
-        noteData: noteData);
+    return MaterialNotesEditDialog.edit(
+      onNoteAccepted: onNoteAccepted,
+      noteData: noteData,
+    );
   }
 
   @override
@@ -37,10 +34,10 @@ class MaterialNotesDialogFactory extends NotesDialogFactory {
     required void Function(NoteData p1) onNoteAccepted,
     NoteData? noteData,
   }) {
-    return MaterialNotesEditDialog(
-        onNoteAccepted: onNoteAccepted,
-        topText: "Edit Note",
-        noteData: noteData);
+    return MaterialNotesEditDialog.add(
+      onNoteAccepted: onNoteAccepted,
+      noteData: noteData,
+    );
   }
 
   @override
@@ -55,13 +52,11 @@ class MaterialNotesDialogFactory extends NotesDialogFactory {
   }
 
   @override
-  AbstractNotesDeleteDialog createMultipleDeleteDialog(
+  NotesDeleteDialog createMultipleDeleteDialog(
       {required void Function() onDelete, required int amount}) {
-    return MaterialNotesDeleteDialog(
+    return MaterialNotesDeleteDialog.multipleDelete(
       onDelete: onDelete,
-      warning:
-          "Are you sure you want to\ndelete $amount ${amount > 1 ? "notes" : "note"}?",
-      topText: 'Delete notes?',
+      amount: amount,
     );
   }
 }

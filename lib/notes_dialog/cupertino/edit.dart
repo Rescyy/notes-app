@@ -11,6 +11,18 @@ class CupertinoNotesEditDialog extends NotesEditDialog {
     super.noteData,
   });
 
+  const CupertinoNotesEditDialog.edit({
+    super.key,
+    required super.onNoteAccepted,
+    super.noteData,
+  }) : super.edit();
+
+  const CupertinoNotesEditDialog.add({
+    super.key,
+    required super.onNoteAccepted,
+    super.noteData,
+  }) : super.add();
+
   @override
   State<StatefulWidget> createState() => CupertinoNotesEditDialogState();
 }

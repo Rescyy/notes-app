@@ -10,11 +10,9 @@ class CupertinoNotesDialogFactory extends NotesDialogFactory {
   const CupertinoNotesDialogFactory();
 
   @override
-  AbstractNotesDeleteDialog createDeleteDialog({required void Function() onDelete}) {
-    return CupertinoNotesDeleteDialog(
+  NotesDeleteDialog createDeleteDialog({required void Function() onDelete}) {
+    return CupertinoNotesDeleteDialog.delete(
       onDelete: onDelete,
-      warning: 'Are you sure you want to delete this note?',
-      topText: 'Delete Note?',
     );
   }
 
@@ -23,9 +21,8 @@ class CupertinoNotesDialogFactory extends NotesDialogFactory {
     required void Function(NoteData) onNoteAccepted,
     NoteData? noteData,
   }) {
-    return CupertinoNotesEditDialog(
+    return CupertinoNotesEditDialog.edit(
       onNoteAccepted: onNoteAccepted,
-      topText: "Edit Note",
       noteData: noteData,
     );
   }
@@ -35,21 +32,18 @@ class CupertinoNotesDialogFactory extends NotesDialogFactory {
     required void Function(NoteData) onNoteAccepted,
     NoteData? noteData,
   }) {
-    return CupertinoNotesEditDialog(
+    return CupertinoNotesEditDialog.add(
       onNoteAccepted: onNoteAccepted,
-      topText: "New Note",
       noteData: noteData,
     );
   }
 
   @override
-  AbstractNotesDeleteDialog createMultipleDeleteDialog(
+  NotesDeleteDialog createMultipleDeleteDialog(
       {required void Function() onDelete, required int amount}) {
-    return CupertinoNotesDeleteDialog(
+    return CupertinoNotesDeleteDialog.multipleDelete(
       onDelete: onDelete,
-      warning:
-          "Are you sure you want to\ndelete $amount ${amount > 1 ? "notes" : "note"}?",
-      topText: 'Delete notes?',
+      amount: amount,
     );
   }
 

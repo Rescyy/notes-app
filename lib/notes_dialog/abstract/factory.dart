@@ -23,11 +23,11 @@ abstract class NotesDialogFactory {
     NoteData? noteData,
   });
 
-  AbstractNotesDeleteDialog createDeleteDialog({
+  NotesDeleteDialog createDeleteDialog({
     required void Function() onDelete,
   });
 
-  AbstractNotesDeleteDialog createMultipleDeleteDialog({
+  NotesDeleteDialog createMultipleDeleteDialog({
     required void Function() onDelete,
     required int amount,
   });
