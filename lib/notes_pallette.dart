@@ -18,9 +18,7 @@ class NotesPallette {
   static const cardIcon = Color.fromARGB(255, 120, 144, 156);
 
   static Color getNoteColor(String title) {
-    return HSVColor.fromColor(
-      Color(title.hashCode)
-        .withOpacity(1))
+    return HSVColor.fromColor(Color(title.hashCode).withOpacity(1))
         .withSaturation(0.2)
         .withValue(0.85)
         .toColor();

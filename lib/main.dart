@@ -1,4 +1,4 @@
-import 'package:assignment_2/notes_body.dart';
+import 'package:assignment_2/notes_body/class.dart';
 import 'package:flutter/material.dart';
 
 void main() {
