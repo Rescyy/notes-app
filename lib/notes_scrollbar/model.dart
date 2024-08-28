@@ -1,3 +1,6 @@
+import 'package:assignment_2/notes_pallette.dart';
+import 'package:flutter/material.dart';
+
 class NotesScrollbarModel extends StatelessWidget {
   const NotesScrollbarModel({
     super.key,

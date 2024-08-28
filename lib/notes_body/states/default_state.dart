@@ -4,7 +4,7 @@ import 'package:assignment_2/notes_body/states/interface_state.dart';
 import 'package:assignment_2/notes_body/states/multiple_delete_state.dart';
 import 'package:assignment_2/notes_database/dataclass.dart';
 import 'package:assignment_2/notes_dialog/abstract/factory.dart';
-import 'package:assignment_2/notes_scrollbar.dart';
+import 'package:assignment_2/notes_scrollbar/class.dart';
 import 'package:flutter/material.dart';
 
 class NotesDefaultState extends NotesState {

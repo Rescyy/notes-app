@@ -1,4 +1,4 @@
-
+import 'package:assignment_2/notes_card/default/class.dart';
 import 'package:assignment_2/notes_database/dataclass.dart';
 import 'package:assignment_2/notes_scrollbar/empty.dart';
 import 'package:assignment_2/notes_scrollbar/model.dart';
