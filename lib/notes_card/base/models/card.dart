@@ -4,24 +4,24 @@ import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
 class _NotesContent extends TextSpan {
-  const _NotesContent(String content)
+  _NotesContent(String content, BuildContext context)
       : super(
           text: content,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 15,
-            color: Colors.black,
+            color: Theme.of(context).colorScheme.onPrimary,
           ),
         );
 }
 
 class _NotesTitle extends TextSpan {
-  const _NotesTitle(String title)
+  _NotesTitle(String title, BuildContext context)
       : super(
           text: title,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
-            color: Colors.black,
+            color: Theme.of(context).colorScheme.onPrimary,
           ),
         );
 }
@@ -37,8 +37,8 @@ class NotesCardModel extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        _NotesTitle titleSpan = _NotesTitle(noteData.title);
-        _NotesContent contentSpan = _NotesContent(noteData.content);
+        _NotesTitle titleSpan = _NotesTitle(noteData.title, context);
+        _NotesContent contentSpan = _NotesContent(noteData.content, context);
         final titleMaxWidth = constraints.maxWidth - 111;
         final titleHeight = (TextPainter(
           text: titleSpan,
@@ -72,7 +72,7 @@ class NotesCardModel extends StatelessWidget {
                 boxShadow: [
                   BoxShadow(
                     blurRadius: 1,
-                    color: NotesPallette.of(context).boxShadow,
+                    color: Theme.of(context).shadowColor,
                     offset: const Offset(0, 3),
                   ),
                 ],

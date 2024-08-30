@@ -1,6 +1,7 @@
 import 'package:assignment_2/notes_database/dataclass.dart';
 import 'package:assignment_2/notes_dialog/abstract/delete.dart';
 import 'package:assignment_2/notes_dialog/abstract/edit.dart';
+import 'package:assignment_2/notes_dialog/cupertino/factory.dart';
 import 'package:assignment_2/notes_dialog/material/factory.dart';
 import 'package:flutter/material.dart';
 
@@ -32,11 +33,11 @@ abstract class NotesDialogFactory {
   });
 
   factory NotesDialogFactory.of(BuildContext context) {
-    // if (Theme.of(context).platform == TargetPlatform.iOS) {
-    //   return const CupertinoNotesDialogFactory();
-    // } else {
-    //   return const MaterialNotesDialogFactory();
-    // }
-    return const MaterialNotesDialogFactory();
+    if (Theme.of(context).platform == TargetPlatform.iOS) {
+      return const CupertinoNotesDialogFactory();
+    } else {
+      return const MaterialNotesDialogFactory();
+    }
+    // return const MaterialNotesDialogFactory();
   }
 }

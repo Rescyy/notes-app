@@ -1,4 +1,3 @@
-import 'package:assignment_2/notes_pallette.dart';
 import 'package:flutter/cupertino.dart';
 
 class CupertinoNotesDeleteDialogModel extends StatelessWidget {
@@ -24,19 +23,19 @@ class CupertinoNotesDeleteDialogModel extends StatelessWidget {
             onDelete();
             Navigator.of(context).pop();
           },
-          child: Text(
+          child: const Text(
             'Yes',
             style: TextStyle(
-              color: NotesPallette.of(context).cupertinoDialogActionNegative,
+              color: CupertinoColors.systemRed,
             ),
           ),
         ),
         CupertinoDialogAction(
           onPressed: Navigator.of(context).pop,
-          child: Text(
+          child: const Text(
             'No',
             style: TextStyle(
-              color: NotesPallette.of(context).cupertinoDialogActionPositive,
+              color: CupertinoColors.systemBlue,
             ),
           ),
         ),

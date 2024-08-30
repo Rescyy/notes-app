@@ -1,5 +1,5 @@
-import 'package:assignment_2/notes_pallette.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class CupertinoNotesEditDialogModel extends StatelessWidget {
   const CupertinoNotesEditDialogModel({
@@ -45,6 +45,10 @@ class CupertinoNotesEditDialogModel extends StatelessWidget {
                 }
                 return null;
               },
+              style: TextStyle(
+                fontSize: 16,
+                color: Theme.of(context).colorScheme.onPrimary,
+              ),
             ),
             const Text('Content'),
             CupertinoTextFormFieldRow(
@@ -62,6 +66,10 @@ class CupertinoNotesEditDialogModel extends StatelessWidget {
                 }
                 return null;
               },
+              style: TextStyle(
+                fontSize: 16,
+                color: Theme.of(context).colorScheme.onPrimary,
+              ),
             ),
           ],
         ),
@@ -69,19 +77,19 @@ class CupertinoNotesEditDialogModel extends StatelessWidget {
       actions: [
         CupertinoDialogAction(
           onPressed: onCancel,
-          child: Text(
+          child: const Text(
             'Cancel',
             style: TextStyle(
-              color: NotesPallette.of(context).cupertinoDialogActionNegative,
+              color: CupertinoColors.systemRed,
             ),
           ),
         ),
         CupertinoDialogAction(
           onPressed: onFinish,
-          child: Text(
+          child: const Text(
             'Save',
             style: TextStyle(
-              color: NotesPallette.of(context).cupertinoDialogActionPositive,
+              color:CupertinoColors.systemBlue,
             ),
           ),
         ),

@@ -20,6 +20,13 @@ class NotesPallette {
   static const cardIcon = Color.fromARGB(255, 120, 144, 156);
   static const cursor = Color.fromARGB(255, 62, 62, 62);
 
+  static const themeDarkText = Color.fromARGB(255, 209, 209, 209);
+  static const themeDarkBackground = Color.fromARGB(255, 60, 60, 60);
+  static const themeDarkPage = Color.fromARGB(255, 33, 33, 33);
+  static const themeDarkPageTransparent = Color.fromARGB(0, 33, 33, 33);
+  static const themeDarkShadow = Color.fromARGB(155, 66, 66, 66);
+  static const themeDarkFloatingButton = Color.fromARGB(255, 125, 125, 125);
+
   static Color getNoteColorLight(String title) {
     return HSVColor.fromColor(Color(title.hashCode).withOpacity(1))
         .withSaturation(0.2)
@@ -29,10 +36,12 @@ class NotesPallette {
 
   static Color getNoteColorDark(String title) {
     return HSVColor.fromColor(Color(title.hashCode).withOpacity(1))
-        .withSaturation(0.4)
-        .withValue(0.85)
+        .withSaturation(0.25)
+        .withValue(0.65)
         .toColor();
   }
+
+  // TODO: Rework themedata, give better names etc. describe where each color is used
 
   static ThemeData get lightTheme => ThemeData(
         floatingActionButtonTheme: const FloatingActionButtonThemeData(
@@ -79,36 +88,63 @@ class NotesPallette {
         shadowColor: noteShadow,
       ).copyWith(extensions: const <NotesPalletteExtension>[
         NotesPalletteExtension(
-          boxShadow: noteShadow,
           noteColorGenerator: getNoteColorLight,
         ),
       ]);
 
   static ThemeData get darkTheme => ThemeData(
-
-  );
+        appBarTheme: const AppBarTheme(
+          backgroundColor: themeDarkPage,
+          foregroundColor: themeDarkText,
+          elevation: 0,
+        ),
+        floatingActionButtonTheme: const FloatingActionButtonThemeData(
+          backgroundColor: themeDarkFloatingButton,
+          splashColor: splashColor,
+          foregroundColor: buttonTextDark,
+        ),
+        colorScheme: const ColorScheme(
+          primary: note,
+          secondary: floatingButton,
+          surface: themeDarkPage,
+          error: Colors.red,
+          onPrimary: textDark,
+          onSecondary: buttonTextDark,
+          onSurface: themeDarkPageTransparent,
+          onError: Colors.orange,
+          brightness: Brightness.dark,
+        ),
+        iconTheme: const IconThemeData(
+          color: Colors.black,
+        ),
+        shadowColor: themeDarkShadow,
+      ).copyWith(extensions: const <NotesPalletteExtension>[
+        NotesPalletteExtension(
+            noteColorGenerator: getNoteColorDark,
+            ),
+      ]);
 
   static NotesPalletteExtension of(BuildContext context) =>
       Theme.of(context).extension<NotesPalletteExtension>()!;
 }
 
 class NotesPalletteExtension extends ThemeExtension<NotesPalletteExtension> {
-  final Color boxShadow;
   final Color Function(String) noteColorGenerator;
   final Color cupertinoDialogActionNegative = CupertinoColors.systemRed;
   final Color cupertinoDialogActionPositive = CupertinoColors.systemBlue;
 
   Color getNoteColor(String text) => noteColorGenerator(text);
 
+  static Color _defaultNoteColor(String _) => NotesPallette.themeDarkBackground;
+
   const NotesPalletteExtension({
-    required this.boxShadow,
-    required this.noteColorGenerator,
+    this.noteColorGenerator = _defaultNoteColor,
   });
 
   @override
-  ThemeExtension<NotesPalletteExtension> copyWith({Color? boxShadow, Color Function(String)? noteColorGenerator}) {
+  ThemeExtension<NotesPalletteExtension> copyWith(
+      {Color? boxShadow, Color Function(String)? noteColorGenerator}) {
     return NotesPalletteExtension(
-      boxShadow: boxShadow ?? this.boxShadow,
       noteColorGenerator: noteColorGenerator ?? this.noteColorGenerator,
     );
   }
@@ -118,7 +154,6 @@ class NotesPalletteExtension extends ThemeExtension<NotesPalletteExtension> {
       covariant NotesPalletteExtension? other, double t) {
     if (other == null) return this;
     return NotesPalletteExtension(
-      boxShadow: Color.lerp(boxShadow, other.boxShadow, t)!,
       noteColorGenerator: (text) {
         return Color.lerp(
             noteColorGenerator(text), other.noteColorGenerator(text), t)!;

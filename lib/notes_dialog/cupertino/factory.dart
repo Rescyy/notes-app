@@ -5,6 +5,7 @@ import 'package:assignment_2/notes_dialog/cupertino/edit.dart';
 import 'package:assignment_2/notes_dialog/abstract/factory.dart';
 import 'package:assignment_2/notes_dialog/abstract/edit.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class CupertinoNotesDialogFactory extends NotesDialogFactory {
   const CupertinoNotesDialogFactory();
@@ -52,6 +53,16 @@ class CupertinoNotesDialogFactory extends NotesDialogFactory {
     required BuildContext context,
     required Widget Function(BuildContext context) builder,
   }) {
-    showCupertinoDialog(context: context, builder: builder);
+    showCupertinoDialog(
+      context: context,
+      builder: (context) => Theme(
+        data: ThemeData(
+          cupertinoOverrideTheme: CupertinoThemeData(
+            brightness: Theme.of(context).brightness,
+          ),
+        ),
+        child: builder(context),
+      ),
+    );
   }
 }
