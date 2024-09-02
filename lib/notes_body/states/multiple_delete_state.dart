@@ -1,9 +1,10 @@
+import 'package:assignment_2/notes_body/drawer.dart';
 import 'package:assignment_2/notes_body/models/body.dart';
 import 'package:assignment_2/notes_body/models/footer_button.dart';
 import 'package:assignment_2/notes_body/states/default_state.dart';
 import 'package:assignment_2/notes_body/states/abstract_state.dart';
 import 'package:assignment_2/notes_dialog/abstract/factory.dart';
-import 'package:assignment_2/notes_scrollbar/multiple_delete.dart';
+import 'package:assignment_2/notes_listview/multiple_delete.dart';
 import 'package:flutter/material.dart';
 
 class NotesMultipleDeleteState extends NotesState {
@@ -33,8 +34,8 @@ class NotesMultipleDeleteState extends NotesState {
                   builder: (context) {
                     return dialogFactory.createMultipleDeleteDialog(
                       amount: selectedNotes.length,
-                      onDelete: () {
-                        controller.database.removeNotes(selectedNotes);
+                      onDelete: () async {
+                        await controller.database.removeNotes(selectedNotes);
                         toDefault();
                       },
                     );
@@ -49,10 +50,16 @@ class NotesMultipleDeleteState extends NotesState {
           ],
         )
       ],
-      child: NotesScrollbarMultipleDelete(
+      onDrawerOpened: toDefault,
+      drawer: NotesDrawer(
+        themeMode: controller.widget.themeMode,
+        onThemeChanged: controller.widget.onThemeChanged,
+      ),
+      child: NotesListViewMultipleDelete(
         scrollKey: controller.scrollKey,
-        notes: controller.database.notes,
-        selectedNotes: selectedNotes,
+        // forced null, only way to reach this state if it was not null
+        notes: controller.database.notes!.entries.toList(),
+        selectedNotesIds: selectedNotes,
         onDeleteSelect: (selected, index) {
           controller.setState(() {
             selected ? selectedNotes.add(index) : selectedNotes.remove(index);

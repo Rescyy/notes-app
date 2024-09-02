@@ -1,10 +1,11 @@
+import 'package:assignment_2/notes_body/drawer.dart';
 import 'package:assignment_2/notes_body/models/add_action_button.dart';
 import 'package:assignment_2/notes_body/models/body.dart';
 import 'package:assignment_2/notes_body/states/abstract_state.dart';
 import 'package:assignment_2/notes_body/states/multiple_delete_state.dart';
 import 'package:assignment_2/notes_database/dataclass.dart';
 import 'package:assignment_2/notes_dialog/abstract/factory.dart';
-import 'package:assignment_2/notes_scrollbar/class.dart';
+import 'package:assignment_2/notes_listview/class.dart';
 import 'package:flutter/material.dart';
 
 class NotesDefaultState extends NotesState {
@@ -22,28 +23,30 @@ class NotesDefaultState extends NotesState {
             context: context,
             builder: (context) {
               return dialogFactory.createAddDialog(
-                onNoteAccepted: (NoteData note) {
-                  controller.setState(() {
-                    controller.database.addNote(note);
-                  });
+                onNoteAccepted: (NoteData note) async {
+                  await controller.database.addNote(note);
+                  controller.setState(() {});
                 },
               );
             },
           );
         },
       ),
-      child: NotesScrollbar(
+      drawer: NotesDrawer(
+        themeMode: controller.widget.themeMode,
+        onThemeChanged: controller.widget.onThemeChanged,
+      ),
+      child: NotesListView(
           scrollKey: controller.scrollKey,
-          notes: controller.database.notes,
-          onNoteEditted: (note, index) {
-            controller.setState(() {
-              controller.database.editNote(note, index);
-            });
+          initialNotes: controller.database.notes,
+          futureNotes: controller.database.futureNotes,
+          onNoteEditted: (note, index) async {
+            await controller.database.editNote(note, index);
+            controller.setState(() {});
           },
-          onNoteDeleted: (index) {
-            controller.setState(() {
-              controller.database.removeNote(index);
-            });
+          onNoteDeleted: (index) async {
+            await controller.database.removeNote(index);
+            controller.setState(() {});
           },
           onToggleMultipleDelete: toMultipleDelete),
     );

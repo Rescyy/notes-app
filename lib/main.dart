@@ -1,40 +1,34 @@
 import 'package:assignment_2/notes_body/class.dart';
 import 'package:assignment_2/notes_pallette.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 void main() {
   runApp(const MainApp());
 }
 
-class MainApp extends StatelessWidget {
+class MainApp extends StatefulWidget {
   const MainApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-        create: (_) => ThemeChangeNotifier(),
-        builder: (context, child) {
-          final provider = Provider.of<ThemeChangeNotifier>(context);
-          return MaterialApp(
-            themeMode: provider.themeMode,
-            theme: NotesPallette.lightTheme,
-            darkTheme: NotesPallette.darkTheme,
-            home: const NotesBody(),
-          );
-        });
-  }
+  State<MainApp> createState() => _MainAppState();
 }
 
-class ThemeChangeNotifier extends ChangeNotifier {
+class _MainAppState extends State<MainApp> {
   ThemeMode themeMode = ThemeMode.system;
 
-  void toggleTheme() {
-    // if (NotesPallette.isDark) {
-    //   // NotesPallette.setLight();
-    // } else {
-    //   // NotesPallette.setDark();
-    // }
-    notifyListeners();
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      themeMode: themeMode,
+      theme: NotesPallette.lightTheme,
+      darkTheme: NotesPallette.darkTheme,
+      home: NotesBody(
+          themeMode: themeMode,
+          onThemeChanged: (themeMode) {
+            setState(() {
+              this.themeMode = themeMode;
+            });
+          }),
+    );
   }
 }

@@ -3,15 +3,19 @@ import 'package:assignment_2/notes_database/dataclass.dart';
 abstract class NotesDatabaseAbstract {
   const NotesDatabaseAbstract();
 
-  List<NoteData> get notes;
+  Future<Map<int, NoteData>> get futureNotes;
 
-  void addNote(NoteData note);
+  Map<int, NoteData>? get notes;
 
-  void removeNote(int index);
+  Future<void> init();
 
-  void removeNotes(Iterable<int> indeces);
+  Future<void> addNote(NoteData note);
 
-  void editNote(NoteData note, int index);
+  Future<void> removeNote(int id);
 
-  void reworderNotes(int oldIndex, int newIndex) => throw UnimplementedError();
+  Future<void> removeNotes(Iterable<int> ids);
+
+  Future<void> editNote(NoteData note, int id);
+
+  Future<void> reworderNotes(int oldIndex, int newIndex) => throw UnimplementedError();
 }

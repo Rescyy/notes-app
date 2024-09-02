@@ -6,11 +6,15 @@ class NotesBodyModel extends StatelessWidget {
     required this.child,
     this.floatingActionButton,
     this.persistentFooterButtons,
+    this.drawer,
+    this.onDrawerOpened,
   });
 
   final Widget? floatingActionButton;
   final List<Widget>? persistentFooterButtons;
   final Widget child;
+  final Drawer? drawer;
+  final void Function()? onDrawerOpened;
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +22,19 @@ class NotesBodyModel extends StatelessWidget {
       appBar: AppBar(
         scrolledUnderElevation: 0.0,
         title: const Text('Notes'),
+        leading: Builder(
+          builder: (context) {
+            return IconButton(
+              icon: const Icon(Icons.menu),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+                if (onDrawerOpened != null) {
+                  onDrawerOpened!();
+                }
+              },
+            );
+          },
+        ),
       ),
       floatingActionButton: floatingActionButton,
       persistentFooterButtons: persistentFooterButtons,
@@ -27,6 +44,7 @@ class NotesBodyModel extends StatelessWidget {
           child: child,
         ),
       ),
+      drawer: drawer,
     );
   }
 }

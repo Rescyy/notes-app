@@ -1,13 +1,13 @@
 import 'package:assignment_2/notes_body/class.dart';
 import 'package:assignment_2/notes_body/states/abstract_state.dart';
 import 'package:assignment_2/notes_database/abstract.dart';
-import 'package:assignment_2/notes_database/bible.dart';
+import 'package:assignment_2/notes_database/sqflite.dart';
 import 'package:flutter/material.dart';
 
 class NotesBodyController extends State<NotesBody> {
 
   final Key _scrollKey = const PageStorageKey('notes');
-  final NotesDatabaseAbstract _database = BibleNotesDatabase();
+  final NotesDatabaseAbstract _database = SqfliteDatabase();
   late NotesState _state = NotesState.init(controller: this);
 
   Key get scrollKey => _scrollKey;

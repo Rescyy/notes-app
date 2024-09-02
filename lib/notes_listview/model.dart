@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class NotesScrollbarModel extends StatelessWidget {
-  const NotesScrollbarModel({
+class NotesListViewModel extends StatelessWidget {
+  const NotesListViewModel({
     super.key,
     required this.itemCount,
     required this.itemBuilder,
