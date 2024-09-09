@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class NotesPallette {
@@ -132,8 +131,6 @@ class NotesPallette {
 
 class NotesPalletteExtension extends ThemeExtension<NotesPalletteExtension> {
   final Color Function(String) noteColorGenerator;
-  final Color cupertinoDialogActionNegative = CupertinoColors.systemRed;
-  final Color cupertinoDialogActionPositive = CupertinoColors.systemBlue;
 
   Color getNoteColor(String text) => noteColorGenerator(text);
 

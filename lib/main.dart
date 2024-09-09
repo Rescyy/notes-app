@@ -23,12 +23,13 @@ class _MainAppState extends State<MainApp> {
       theme: NotesPallette.lightTheme,
       darkTheme: NotesPallette.darkTheme,
       home: NotesBody(
-          themeMode: themeMode,
-          onThemeChanged: (themeMode) {
-            setState(() {
-              this.themeMode = themeMode;
-            });
-          }),
+        themeMode: themeMode,
+        onThemeChanged: (themeMode) {
+          setState(() {
+            this.themeMode = themeMode;
+          });
+        },
+      ),
     );
   }
 }
